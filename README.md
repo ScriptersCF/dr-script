@@ -16,3 +16,6 @@ The source code for the work-in-progress bot that we use in our Discord server.
 - !derole command for administrators to remove GJ participant role from everyone
 - Automatically update user's level when they reach point threshold
 - Automatically give user roles e.g. Verif lvl. 2, Regular, 10k Club
+- Anti-spam feature that can mute users for too many messages within a certain period of time
+- Prevent hammers from being used in non-moderators' nicknames, force moderators' nicknames to end with hammer
+- Automatically award users with relevant donator roles when they donate via webhook, or nitro boost server
