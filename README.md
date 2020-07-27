@@ -2,7 +2,7 @@
 The source code for the work-in-progress bot that we use in our Discord server.
 
 ## To-do list
-*Contributions are welcome, feel free to check to [ScriptersCF/Discord_Bot/scf.py](https://github.com/ScriptersCF/Discord_Bot/blob/master/bot.py) for reference.
+*Contributions are welcome, feel free to check to [ScriptersCF/Discord_Bot/scf.py](https://github.com/ScriptersCF/Discord_Bot/blob/master/bot.py) for reference.*
 - Log deleted + edited chat messages
 - !stats command for everyone to view their stats
 - !addpoints command for moderators to give user points
