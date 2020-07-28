@@ -5,7 +5,7 @@ version = "Mr. Script 0.1" + bot_type
 rich_presence = "www.scf.cx/bot"
 
 token = ""
-test_token = "NzM3NDYyNjQxMTU2NTU0ODUy.Xx9tmw.qfWEOS82HaoSmeXjJuyJpQKUe2Y"
+test_token = ""
 
 muted = 335171382428303360
 aban = 550114698297737216
