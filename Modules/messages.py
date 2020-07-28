@@ -50,6 +50,13 @@ async def award_points(message):
         # update db
         await functions.increase_count(message.author, "point", point_amount)
 
+async def clear(message):
+    arguments =  await functions.get_arguments(message)
+    messages_to_delete = int(arguments[0])
+
+    # Go through x most recent messages in this channel, and delete them.
+    async for sent_message in message.channel.history(limit=messages_to_delete):
+        await sent_message.delete()
 
 async def handle(message):
     global last_check_time

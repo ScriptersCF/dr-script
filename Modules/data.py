@@ -5,7 +5,7 @@ version = "Mr. Script 0.1" + bot_type
 rich_presence = "www.scf.cx/bot"
 
 token = ""
-test_token = ""
+test_token = "NzM3NDYyNjQxMTU2NTU0ODUy.Xx9tmw.qfWEOS82HaoSmeXjJuyJpQKUe2Y"
 
 muted = 335171382428303360
 aban = 550114698297737216
@@ -63,7 +63,8 @@ command_aliases = {
     "ban": "ban",
     "aban": "aban",
     "shban": "shban",
-    "unmute": "unmute"
+    "unmute": "unmute",
+    "clear": "clear",
 }
 
 punishment_names = {
