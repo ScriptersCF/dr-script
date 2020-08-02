@@ -3,6 +3,7 @@ from time import time
 
 last_check_time = 0
 
+
 # check_punishments unfinished
 async def check_punishments(guild):
     # iterate through each punishment, ignore if no expiration
@@ -11,7 +12,7 @@ async def check_punishments(guild):
         for punishment in range(1, 4):
             if not user[punishment]:
                 continue
-            
+
             # if expired, replace punishment expiration
             if int(time()) >= int(user[punishment]):
                 punish_type = data.punishment_names[punishment]
@@ -29,8 +30,7 @@ async def check_punishments(guild):
                     "ScriptersCF",
                     f"Your **{punish_type}** has expired at ScriptersCF."
                 )
-                
-            
+
         # if user has no active punishments, remove row from database
         if not any(user[1:]):
             functions.set_data(
@@ -50,13 +50,14 @@ async def award_points(message):
         # update db
         await functions.increase_count(message.author, "point", point_amount)
 
-async def clear(message):
-    arguments =  await functions.get_arguments(message)
-    messages_to_delete = int(arguments[0])
 
-    # Go through x most recent messages in this channel, and delete them.
-    async for sent_message in message.channel.history(limit=messages_to_delete):
-        await sent_message.delete()
+async def clear(message):
+    arguments = await functions.get_arguments(message)
+    messages_to_delete = min(100, max(0, int(arguments[0])))
+
+    print(messages_to_delete)
+    await message.channel.purge(limit=messages_to_delete)
+
 
 async def handle(message):
     global last_check_time
