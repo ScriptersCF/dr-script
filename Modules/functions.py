@@ -1,13 +1,15 @@
 import discord, sqlite3, json, time
 from Modules import data
 
-async def send_embed(channel, title, description):
+async def send_embed(channel, title, description, *args):
     try:
         embed = discord.Embed(
             title = title,
             description = description,
             colour = 0x0094FF
         )
+        if args:
+            embed.set_image(url=args[0])
         #embed.set_footer(text = data.version + " for ScriptersCF | !help")
         return await channel.send(embed = embed)
     except:

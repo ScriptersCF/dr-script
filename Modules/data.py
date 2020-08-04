@@ -11,7 +11,7 @@ muted = 335171382428303360
 aban = 550114698297737216
 shban = 416786636118949918
 
-verified = 346604542550605835
+verified = 739307933791158354
 forhire = 374610760032321537
 notforhire = 374610878940708864
 scripter = 308611398672318475
@@ -41,11 +41,38 @@ channel_points = {
     639153031619018752: 3
 }
 
+color_list = {
+    "Maroon",
+    "Red",
+    "Coral",
+    "Brown",
+    "Orange",
+    "Wheat",
+    "Gold",
+    "Yellow",
+    "Green",
+    "Lime",
+    "Cyan",
+    "Blue",
+    "Navy Blue",
+    "Blurple",
+    "Fuchsia",
+    "Hot Pink",
+    "Purple",
+    "Plum",
+    "Black",
+    "Grey",
+    "White"
+}
+
 command_aliases = {
     "help": "help",
     "cmds": "help",
     "commands": "help",
     "info": "help",
+    
+    "changecolour": "changecolour",
+    "colourlist": "colourlist",
 
     "toggle": "toggle",
 
@@ -63,7 +90,9 @@ command_aliases = {
     "ban": "ban",
     "aban": "aban",
     "shban": "shban",
-    "unmute": "unmute"
+    "unmute": "unmute",
+    "lock": "lock",
+    "unlock": "unlock"
 }
 
 punishment_names = {
