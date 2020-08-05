@@ -52,11 +52,18 @@ async def award_points(message):
 
 
 async def clear(message):
+    # set amount of messages to delete with cap of 100, + message from mod
     arguments = await functions.get_arguments(message)
-    messages_to_delete = min(100, max(0, int(arguments[0])))
+    messages_to_delete = min(100, max(0, int(arguments[0]))) + 1
 
-    print(messages_to_delete)
+    # purge and log
     await message.channel.purge(limit=messages_to_delete)
+    await functions.send_embed(
+        message.guild.get_channel(data.logs_channel),
+        "Clear",
+        f"""**Moderator:** <@{str(message.author.id)}>
+        **Amount:** {str(messages_to_delete)}"""
+    )
 
 
 async def handle(message):
