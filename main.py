@@ -20,6 +20,7 @@ command_list = {
     "aban": {"run": punishments.aban, "requirement": ["Moderator"]},
     "shban": {"run": punishments.shban, "requirement": ["Moderator"]},
     "unmute": {"run": punishments.unmute, "requirement": ["Moderator"]},
+    "clear": {"run": messages.clear, "requirement": ["Moderator"]},
     "report": {"run": punishments.report, "requirement": ["Verified"]}
 }
 

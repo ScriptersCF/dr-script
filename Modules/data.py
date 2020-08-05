@@ -64,6 +64,7 @@ command_aliases = {
     "aban": "aban",
     "shban": "shban",
     "unmute": "unmute",
+    "clear": "clear",
     "report": "report"
 }
 
