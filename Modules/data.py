@@ -11,7 +11,7 @@ muted = 335171382428303360
 aban = 550114698297737216
 shban = 416786636118949918
 
-verified = 739307933791158354
+verified = 346604542550605835
 forhire = 374610760032321537
 notforhire = 374610878940708864
 scripter = 308611398672318475
@@ -92,7 +92,9 @@ command_aliases = {
     "shban": "shban",
     "unmute": "unmute",
     "lock": "lock",
-    "unlock": "unlock"
+    "unlock": "unlock",
+    "clear": "clear",
+    "report": "report"
 }
 
 punishment_names = {

@@ -13,17 +13,19 @@ command_list = {
     "notforhire": {"run": commands.notforhire, "requirement": ["Verified"]},
     "scripter": {"run": commands.scripter, "requirement": ["Verified"]},
     "learner": {"run": commands.learner, "requirement": ["Verified"]},
-    "lock": {"run": commands.lock, "requirement": ["Moderator"]},
-    "unlock": {"run": commands.unlock, "requirement": ["Moderator"]},
     "changecolour": {"run": commands.changecolor, "requirement": ["Donator+", "Nitro Booster"]},
     "colourlist": {"run": commands.colourlist, "requirement": ["Verified"]},
-
+    "report": {"run": punishments.report, "requirement": ["Verified"]},
+    
     "mute": {"run": punishments.mute, "requirement": ["Moderator", "Trial Moderator"]},
     "kick": {"run": punishments.kick, "requirement": ["Moderator"]},
     "ban": {"run": punishments.ban, "requirement": ["Administrator", "Senior Moderator"]},
     "aban": {"run": punishments.aban, "requirement": ["Moderator"]},
     "shban": {"run": punishments.shban, "requirement": ["Moderator"]},
-    "unmute": {"run": punishments.unmute, "requirement": ["Moderator"]}
+    "unmute": {"run": punishments.unmute, "requirement": ["Moderator"]},
+    "lock": {"run": commands.lock, "requirement": ["Moderator"]},
+    "unlock": {"run": commands.unlock, "requirement": ["Moderator"]},
+    "clear": {"run": messages.clear, "requirement": ["Moderator"]}
 }
 
 
