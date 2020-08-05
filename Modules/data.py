@@ -63,7 +63,8 @@ command_aliases = {
     "ban": "ban",
     "aban": "aban",
     "shban": "shban",
-    "unmute": "unmute"
+    "unmute": "unmute",
+    "report": "report"
 }
 
 punishment_names = {
