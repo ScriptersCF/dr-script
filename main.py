@@ -59,10 +59,11 @@ async def on_message(message):
     if message.content.startswith(data.prefix):
         command_exists = await interpret_command(message)
         if not command_exists:
+            if message.content.startswith("!level") or message.content.startswith("!rank") or message.content.startswith("!stats")
             await functions.send_embed(
                 message.channel,
-                "⚠️ Unknown Command",
-                "If this is a real command, please try again in a few days."
+                "⚠️ Sorry!",
+                "This command is currently not available. Check back in a couple days."
             )
     
     # check message for spam, award points and such
