@@ -72,6 +72,8 @@ command_aliases = {
     "info": "help",
     
     "changecolour": "changecolour",
+    "changecolor": "changecolour",
+    "colorlist": "colourlist",
     "colourlist": "colourlist",
 
     "toggle": "toggle",
