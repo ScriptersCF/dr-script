@@ -64,6 +64,30 @@ def remove_tags(message):
     return message
 
 
+async def setup_data(user):
+    # if data doesn't exist, give user default amount of points
+    existing_data = get_data("SELECT * FROM scores WHERE userId = (?)", (user.id,))
+    if not existing_data:
+        set_data(
+            "INSERT INTO scores (userId, points, level) VALUES ((?), (?), (?))",
+            (str(user.id), 1, 1)
+        )
+
+
+async def is_staff(user):
+    # iterate through user's roles, if user has mod then return true
+    for role in user.roles:
+        if role.name == "Moderator":
+            return True
+
+
+async def is_verified(user):
+    # iterate through user's roles, if user has verified role then return true
+    for role in user.roles:
+        if role.name == "Verified":
+            return True
+
+
 async def get_arguments(message):
     # check message arguments, return error if none given
     arguments = message.content.split()[1:]
@@ -94,11 +118,18 @@ async def increase_count(target, column_type, amount):
         (str(current_amount + amount), str(target.id))
     )
 
+
 async def set_punish_time(target, punish_type, length, multiply):
     # set end_time to time that punishment should end
     end_time = int(time.time() + int(length) * multiply) if length != "∞" else 10 ^ 10
-    current_data = get_data("SELECT * FROM Punishments WHERE userId = (?)", (str(target.id), ))
+    current_data = get_data("SELECT * FROM punishments WHERE userId = (?)", (str(target.id), ))
 
     # if user has no active punishments, add row to database
     if not current_data:
         set_data("INSERT INTO punishments (userId) VALUES (?)", (str(target.id), ))
+    
+    # set punishment expiration time accordingly
+    set_data(
+        f"UPDATE punishments SET {punish_type}End = (?) WHERE userId = (?)",
+        (str(end_time), str(target.id))
+    )

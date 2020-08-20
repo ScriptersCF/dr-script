@@ -29,6 +29,7 @@ async def mute(message):
     # iterate through targets, ignore user if moderator
     for target in targets:
         try:
+            await functions.setup_data(target)
             for role in target.roles:
                 if role.name == "Moderator":
                     raise Exception("user is moderator")
@@ -89,6 +90,7 @@ async def kick(message):
     # iterate through targets, ignore user if moderator
     for target in targets:
         try:
+            await functions.setup_data(target)
             for role in target.roles:
                 if role.name == "Moderator":
                     raise Exception("user is moderator")
@@ -143,6 +145,7 @@ async def ban(message):
     # iterate through targets, ignore user if moderator
     for target in targets:
         try:
+            await functions.setup_data(target)
             for role in target.roles:
                 if role.name == "Moderator":
                     raise Exception("user is moderator")
@@ -202,6 +205,7 @@ async def shban(message):
     # iterate through targets, ignore user if moderator
     for target in targets:
         try:
+            await functions.setup_data(target)
             for role in target.roles:
                 if role.name == "Moderator":
                     raise Exception("user is moderator")
@@ -266,6 +270,7 @@ async def aban(message):
     # iterate through targets, ignore user if moderator
     for target in targets:
         try:
+            await functions.setup_data(target)
             for role in target.roles:
                 if role.name == "Moderator":
                     raise Exception("user is moderator")
@@ -320,6 +325,7 @@ async def unmute(message):
     # iterate through targets, send direct messages, increase data and mute
     for target in targets:
         try:
+            await functions.setup_data(target)
             await functions.send_embed(
                 target,
                 "ScriptersCF",
@@ -350,7 +356,7 @@ async def report(message):
     arguments = await functions.get_arguments(message)
     if not arguments:
         return
-    
+
     failure_count = 0
     self_report = False
     targets = []
@@ -360,31 +366,26 @@ async def report(message):
     for argument in arguments:
         if argument.startswith("<@"):
             targets.append(message.mentions[len(targets)])
-        
+
         # if not target, update reason and stop iterating
         else:
             reason = " ".join(arguments[len(targets):])
             break
-    
+
     # iterate through targets, ignore user if moderator
     for target in targets:
-        print("Target: " + target.name)
         try:
+            await functions.setup_data(target)
             for role in target.roles:
                 if role.name == "Moderator":
                     raise Exception("user is moderator")
-           
+
             if target.id == message.author.id:
                 raise Exception("self report")
-
-            await functions.send_embed(
-                target,
-                "ScriptersCF",
-                f"You have been **reported** in ScriptersCF for the following reason: ```{reason}```"
-            )
+            
         except:
             failure_count += 1
-    
+
     # log kicked targets + reason in logs channel
     if failure_count == 0:
         await functions.send_embed(
@@ -403,12 +404,8 @@ async def report(message):
             **Reason:** """ + reason
         )
         
-        
-
     # tell user whether successful or not
     if failure_count == 0 and not self_report:
         await message.add_reaction("👍")
     else:
         await functions.send_error(message.channel, f"{str(failure_count)} user was not reported.")
-
-

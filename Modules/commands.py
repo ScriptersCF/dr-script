@@ -66,3 +66,50 @@ async def toggle(message):
     # otherwise, show error
     else:
         await functions.send_error(message.channel, "Role not found")
+
+
+async def lock(message):
+    channel = message.channel
+    role = message.guild.get_role(data.verified)
+    await channel.set_permissions(role, send_messages=False)
+
+
+async def unlock(message):
+    channel = message.channel
+    role = message.guild.get_role(data.verified)
+    await channel.set_permissions(role, send_messages=True)
+
+
+async def colourlist(message):
+    await functions.send_embed(
+        message.author,
+        "Colour List",
+        "",
+        "https://cdn.discordapp.com/attachments/306153640023031820/740004654368424066/unknown.png"
+    )
+
+
+async def changecolor(message):
+    arguments = await functions.get_arguments(message)
+    if not arguments:
+        await colourlist(message)
+        return
+
+    color = arguments[0].lower()
+    if not color in data.color_list:
+        await functions.send_error(message.channel, "That is not a valid colour.")
+        return
+
+    roles = message.author.roles
+
+    for role in roles:
+        if "Custom //" in role.name:
+            for newrole in message.guild.roles:
+                if newrole.name.lower() == "custom // " + color:
+                    try:
+                        await role.delete(reason="Changing Colour")
+                        await message.author.add_roles(newrole)
+                        await functions.send_embed(message.channel, "Success! 👍", "Your custom colour has successfully been changed.")
+                    except:
+                        await functions.send_error(message.channel, "An error occurred, try again later.")
+                        return False
