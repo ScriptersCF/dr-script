@@ -1,7 +1,8 @@
 prefix = "!"
 bot_type = "T"
+check_cooldown = 25
 
-version = "Mr. Script 0.1" + bot_type
+version = "Mr. Script 0.2" + bot_type
 rich_presence = "www.scf.cx/bot"
 
 token = ""
@@ -41,11 +42,40 @@ channel_points = {
     639153031619018752: 3
 }
 
+color_list = {
+    "Maroon",
+    "Red",
+    "Coral",
+    "Brown",
+    "Orange",
+    "Wheat",
+    "Gold",
+    "Yellow",
+    "Green",
+    "Lime",
+    "Cyan",
+    "Blue",
+    "Navy Blue",
+    "Blurple",
+    "Fuchsia",
+    "Hot Pink",
+    "Purple",
+    "Plum",
+    "Black",
+    "Grey",
+    "White"
+}
+
 command_aliases = {
     "help": "help",
     "cmds": "help",
     "commands": "help",
     "info": "help",
+
+    #"changecolour": "changecolour",
+    #"changecolor": "changecolour",
+    #"colorlist": "colourlist",
+    #"colourlist": "colourlist",
 
     "toggle": "toggle",
 
@@ -58,12 +88,20 @@ command_aliases = {
     "scripter": "scripter",
     "learner": "learner",
 
+    #"stats": "stats",
+    #"points": "stats",
+    #"rank": "stats",
+    #"statistics": "stats",
+    #"ranking": "stats",
+
     "kick": "kick",
     "mute": "mute",
     "ban": "ban",
     "aban": "aban",
     "shban": "shban",
     "unmute": "unmute",
+    "lock": "lock",
+    "unlock": "unlock",
     "clear": "clear",
     "report": "report"
 }
@@ -120,3 +158,5 @@ help_message = """`!help` - Displays general help for the Mr. Script bot.
 <:Patreon:735535762178703390> Support us on [Patreon](https://patreon.com/ScriptersCF).
 <:Twitter:735526455806656595> Follow [@ScriptersCF](https://twitter.com/ScriptersCF) on Twitter.
 """
+
+hammers = ["🔨","🛠️","⚒️","⛏️","⚔️","⛏","🛠","⚒"]
