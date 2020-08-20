@@ -41,49 +41,8 @@ async def interpret_command(message):
                     return True
 
 
-@client.event
-async def on_message(message):
-    if message.author.bot or not message.guild:
-        return
-
-    # handle #pending channel, give new users verified role
-    if message.channel.name == "pending":
-        if message.content == "!agree":
-            role = message.guild.get_role(data.verified)
-            await message.author.add_roles(role)
-        else:
-            await message.delete()
-        return
-    
-    # interpret command if starts with prefix
-    if message.content.startswith(data.prefix):
-        command_exists = await interpret_command(message)
-        if not command_exists:
-            await functions.send_embed(
-                message.channel,
-                "⚠️ Unknown Command",
-                "If this is a real command, please try again in a few days."
-            )
-    
-    # check message for spam, award points and such
-    await messages.handle(message)
-
-
-@client.event
-async def on_member_join(member):
-    # disabled due to having reached max invites in server
-    """global private_invites
-
-    # check if user has verified via dm, let in if legitimate, else kick
-    if member.id in private_invites:
-        invites = await member.guild.invites()
-        if private_invites[member.id]["invite"] not in invites:
-            del private_invites[member.id]
-            role = member.guild.get_role(data.verified)
-            await member.add_roles(role)
-        else:
-            await member.kick(reason = "User didn't join with private invite.")
-        return
+async def generate_invite(member):
+    global private_invites
 
     # otherwise, generate private invite to #general for user for verification, dm, kick and log
     try:
@@ -103,11 +62,76 @@ async def on_member_join(member):
         await asyncio.wait(600)
         if member.id in private_invites:
             del private_invites[member.id]
-
-    
+            
     # in case of error, kick user regardless to protect server
     except Exception as error:
-        await member.kick(reason = f"Kicked due to error: {error}")"""
+        await member.kick(reason = f"Kicked due to error: {error}")
+
+
+@client.event
+async def on_message(message):
+    # if not in server or user is bot, ignore
+    if message.author.bot or not message.guild:
+        return
+    
+    # if user is not verified, start verif process
+    if message.content and not await functions.is_verified(message.author):
+        await generate_invite(message.author)
+        await message.delete()
+        return
+    
+    # setup user data if it doesn't already exist
+    await functions.setup_data(message.author)
+    
+    # interpret command if starts with prefix
+    if message.content.startswith(data.prefix):
+        command_exists = await interpret_command(message)
+        if not command_exists:
+            await functions.send_embed(
+                message.channel,
+                "⚠️ Unknown Command",
+                "If this is a real command, please try again in a few days."
+            )
+    
+    # check message for spam, award points and such
+    await messages.handle(message)
+
+
+@client.event
+async def on_member_update(before, after):
+    # check if user is staff member, toggle hammer accordingly
+    try:
+        if await functions.is_staff(after):
+            if "🔨" not in after.nick:
+                await after.edit(nick = after.nick + " 🔨")
+        else:
+            for hammer in data.hammers:
+                if hammer in after.nick:
+                    await after.edit(
+                        nick = after.nick.replace(hammer, "")
+                            or "Unnamed"
+                    )
+    except:
+        0
+
+
+@client.event
+async def on_member_join(member):
+    global private_invites
+
+    # check if user has verified via dm, let in & setup data if legitimate, else kick
+    if member.id in private_invites:
+        invites = await member.guild.invites()
+        if private_invites[member.id]["invite"] not in invites:
+            del private_invites[member.id]
+            role = member.guild.get_role(data.verified)
+            await member.add_roles(role)
+            await functions.setup_data(member)
+        else:
+            await member.kick(reason = "User didn't join with private invite.")
+        return
+
+    await generate_invite(member)
 
 
 @client.event
