@@ -3,7 +3,6 @@ from time import time
 
 last_check_time = 0
 
-
 # check_punishments unfinished
 async def check_punishments(guild):
     # iterate through each punishment, ignore if no expiration
@@ -12,25 +11,29 @@ async def check_punishments(guild):
         for punishment in range(1, 4):
             if not user[punishment]:
                 continue
-
+            
             # if expired, replace punishment expiration
-            if int(time()) >= int(user[punishment]):
-                punish_type = data.punishment_names[punishment]
-                functions.set_data(
-                    f"UPDATE punishments SET {punish_type + 'End'} = NULL WHERE userId = (?)",
-                    (user_id, )
-                )
+            try:
+                if int(time()) >= float(user[punishment]):
+                    punish_type = data.punishment_names[punishment]
+                    functions.set_data(
+                        f"UPDATE punishments SET {punish_type + 'End'} = NULL WHERE userId = (?)",
+                        (user_id, )
+                    )
 
-                # find user, get associated role, remove and dm user
-                target = guild.get_member(int(user_id))
-                role = guild.get_role(data.punishment_roles[punish_type])
-                target.remove_roles(role)
-                await functions.send_embed(
-                    target,
-                    "ScriptersCF",
-                    f"Your **{punish_type}** has expired at ScriptersCF."
-                )
-
+                    # find user, get associated role, remove and dm user
+                    target = guild.get_member(int(user_id))
+                    role = guild.get_role(data.punishment_roles[punish_type])
+                    await target.remove_roles(role)
+                    await functions.send_embed(
+                        target,
+                        "ScriptersCF",
+                        f"Your **{punish_type}** has expired at ScriptersCF."
+                    )
+            except:
+                0
+                
+            
         # if user has no active punishments, remove row from database
         if not any(user[1:]):
             functions.set_data(
@@ -54,15 +57,16 @@ async def award_points(message):
 async def clear(message):
     # set amount of messages to delete with cap of 100, + message from mod
     arguments = await functions.get_arguments(message)
-    messages_to_delete = min(100, max(0, int(arguments[0]))) + 1
+    messages_to_delete = min(100, max(0, int(arguments[0])))
 
     # purge and log
-    await message.channel.purge(limit=messages_to_delete)
+    await message.channel.purge(limit=messages_to_delete + 1)
     await functions.send_embed(
         message.guild.get_channel(data.logs_channel),
         "Clear",
         f"""**Moderator:** <@{str(message.author.id)}>
-        **Amount:** {str(messages_to_delete)}"""
+        **Amount:** {str(messages_to_delete)}
+        **Channel:** <#{str(message.channel.id)}>"""
     )
 
 
@@ -73,6 +77,6 @@ async def handle(message):
 
     # if 15 seconds has passed since last message, call funcs + reset
     current_time = int(time())
-    if current_time >= last_check_time + 15:
+    if current_time >= last_check_time + data.check_cooldown:
         last_check_time = current_time
-        #await check_punishments(message.guild)
+        await check_punishments(message.guild)
