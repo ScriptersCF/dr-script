@@ -121,7 +121,7 @@ async def increase_count(target, column_type, amount):
 
 async def set_punish_time(target, punish_type, length, multiply):
     # set end_time to time that punishment should end
-    end_time = int(time.time() + int(length) * multiply) if length != "∞" else 10 ^ 10
+    end_time = int(time.time() + int(length) * multiply) if length != "∞" else 10 ** 10
     current_data = get_data("SELECT * FROM punishments WHERE userId = (?)", (str(target.id), ))
 
     # if user has no active punishments, add row to database
