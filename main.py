@@ -21,7 +21,11 @@ command_list = {
     "shban": {"run": punishments.shban, "requirement": ["Moderator"]},
     "unmute": {"run": punishments.unmute, "requirement": ["Moderator"]},
     "clear": {"run": messages.clear, "requirement": ["Moderator"]},
-    "report": {"run": punishments.report, "requirement": ["Verified"]}
+    "report": {"run": punishments.report, "requirement": ["Verified"]},
+
+    #fun commands
+    "roll": {"run": commands.roll, "requirement": ["Verified"]},
+    "rolldie": {"run": commands.rolldie, "requirement": ["Verified"]}
 }
 
 

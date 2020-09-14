@@ -12,7 +12,7 @@ muted = 335171382428303360
 aban = 550114698297737216
 shban = 416786636118949918
 
-verified = 346604542550605835
+verified = 757979296802537572
 forhire = 374610760032321537
 notforhire = 374610878940708864
 scripter = 308611398672318475
@@ -22,8 +22,8 @@ no_server = 676921838181548083
 no_gamejam = 678974586951565312
 no_event = 676921944880185365
 
-general_channel = 306153640023031820
-logs_channel = 332883332528603146
+general_channel = 757972176967041096
+logs_channel = 757974127167406282
 
 channel_points = {
     349255881977757696: 0,
@@ -103,7 +103,10 @@ command_aliases = {
     "lock": "lock",
     "unlock": "unlock",
     "clear": "clear",
-    "report": "report"
+    "report": "report",
+
+    "roll": "roll",
+    "rolldie": "rolldie"
 }
 
 punishment_names = {
@@ -137,7 +140,7 @@ help_message = """`!help` - Displays general help for the Mr. Script bot.
 `!stats @user OR <num>` - Displays the user's stats.
 `!leaderboard` - Displays the top 10 most active server members.
 `!report @user <reason>` - Reports a user for breaking our rules.
-`!roll 5d3` - Rolls 5 3-sided dice.
+`!roll <optional max number>` - Rolls a number between 1-MaxNum or 1-100.
 `!rolldie` - Rolls a standard 6-sided die.
 
 **Roles**

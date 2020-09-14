@@ -1,5 +1,6 @@
 import discord, json
 from Modules import functions, data
+import random, math
 
 
 async def help(message):
@@ -87,6 +88,22 @@ async def colourlist(message):
         "",
         "https://cdn.discordapp.com/attachments/306153640023031820/740004654368424066/unknown.png"
     )
+
+
+async def roll(message):
+    Max = 100
+    arguments = message.content.split() #not using the arguments function, cuz if there are no arguments, let it roll 1-100
+    if len(arguments) >= 2:
+        try:
+            int(arguments[1])
+            Max = int(arguments[1])
+        except ValueError:
+            Max = Max
+    await message.channel.send(message.author.mention+", you rolled "+str(math.ceil(random.random()*Max))+" points!")
+
+
+async def rolldie(message):
+    await message.channel.send(message.author.mention + ", you rolled " + str(math.ceil(random.random() * 6)) + " points!")
 
 
 async def changecolor(message):
