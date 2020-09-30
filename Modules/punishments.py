@@ -46,7 +46,7 @@ async def mute(message):
             role = message.guild.get_role(data.muted)
             await target.add_roles(role)
         
-        # otherwise, increase failure count to warn moderator
+            # otherwise, increase failure count to warn moderator
         except:
             failure_count += 1
     

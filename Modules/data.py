@@ -2,13 +2,13 @@ prefix = "!"
 bot_type = "T"
 check_cooldown = 25
 
-version = "Mr. Script 0.2" + bot_type
+version = "Mr. Script 0.21" + bot_type
 rich_presence = "www.scf.cx/bot"
 
 token = ""
 test_token = ""
 
-muted = 335171382428303360
+muted = 637330543947546624#335171382428303360
 aban = 550114698297737216
 shban = 416786636118949918
 
@@ -103,7 +103,11 @@ command_aliases = {
     "lock": "lock",
     "unlock": "unlock",
     "clear": "clear",
-    "report": "report"
+    "report": "report",
+
+    "stats": "stats",
+    "points": "stats",
+    "level": "stats"
 }
 
 punishment_names = {
