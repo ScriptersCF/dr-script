@@ -7,6 +7,7 @@ We don't currently have too many rules for contributions, but we ask that you fo
 - All contributions should use snake_case in consistency with the rest of the project
 - Please ensure that any IDs changed for testing purposes have been changed back to the original IDs so that it is easier for us to merge both projects.
 - If possible, please write comments where necessary in your code so that it is easier for people to understand.
+- Pull requests to fix typos/grammar mistakes are accepted, extremely minor changes that make no difference to the repository are not and will be marked as spam.
 
 When testing the code for yourself, you should use Python 3.8 and ensure that `discord` has been installed via PIP. You may also need to change some IDs temporarily in the data.py file when testing.
 
