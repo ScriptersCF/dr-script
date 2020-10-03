@@ -21,7 +21,9 @@ command_list = {
     "shban": {"run": punishments.shban, "requirement": ["Moderator"]},
     "unmute": {"run": punishments.unmute, "requirement": ["Moderator"]},
     "clear": {"run": messages.clear, "requirement": ["Moderator"]},
-    "report": {"run": punishments.report, "requirement": ["Verified"]}
+    "report": {"run": punishments.report, "requirement": ["Verified"]},
+
+    "stats": {"run": messages.stats, "requirement": ["Verified"]}
 }
 
 
@@ -87,11 +89,7 @@ async def on_message(message):
     if message.content.startswith(data.prefix):
         command_exists = await interpret_command(message)
         if not command_exists:
-            await functions.send_embed(
-                message.channel,
-                "⚠️ Unknown Command",
-                "If this is a real command, please try again in a few days."
-            )
+            await message.add_reaction("❌")
     
     # check message for spam, award points and such
     await messages.handle(message)

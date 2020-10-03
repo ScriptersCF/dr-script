@@ -70,6 +70,23 @@ async def clear(message):
     )
 
 
+async def stats(message):
+    # get user's current stats to display
+    user_data = functions.get_data(
+        f"SELECT * FROM scores WHERE userId = (?)",
+        (str(message.author.id), )
+    )
+
+    # format user's stats
+    await functions.send_embed(
+        message.channel,
+        "Stats",
+        f"""**User:** <@{message.author.id}>
+        **Level:** {user_data[2]}
+        **Points:** {user_data[1]}"""
+    )
+
+
 async def handle(message):
     global last_check_time
 
