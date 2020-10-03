@@ -1,8 +1,8 @@
-import discord, asyncio, aiohttp, sqlite3, json, requests, csv, time
+import discord, asyncio, aiohttp, sqlite3, json, requests, csv, time, datetime
 from discord import Webhook, RequestsWebhookAdapter
 client = discord.Client()
 
-from Modules import *
+from Modules import commands, data, functions, messages, punishments
 private_invites = {}
 
 command_list = {
@@ -35,7 +35,7 @@ async def interpret_command(message):
         if name == inputted_command[len(data.prefix):]:
             command = data.command_aliases[name]
             command_data = command_list[command]
-            
+
             # iterate through user's roles and check if role requirement met
             for role in message.author.roles:
                 if role.name in command_data["requirement"]:
@@ -57,14 +57,18 @@ async def generate_invite(member):
         )
         await functions.send_embed(member, "Welcome!", data.welcome_message)
         await functions.send_embed(member, "", data.join_message.format(invite.code))
-        await member.kick(reason = f"Private invite code '{invite.code}' has been sent.")
-        private_invites[member.id] = {"invite": invite, "timeout": time.time() + 600}
 
-        # wait 10 minutes and reset dictionary if still found
-        await asyncio.wait(600)
-        if member.id in private_invites:
-            del private_invites[member.id]
-            
+        try:
+            await member.kick(reason = f"Private invite code '{invite.code}' has been sent.")
+            private_invites[member.id] = {"invite": invite, "timeout": time.time() + 600}
+
+            # wait 10 minutes and reset dictionary if still found
+            await asyncio.wait(600)
+            if member.id in private_invites:
+                del private_invites[member.id]
+        except discord.errors.Forbidden:
+            print('User could not be kicked (Permission denied)')
+
     # in case of error, kick user regardless to protect server
     except Exception as error:
         await member.kick(reason = f"Kicked due to error: {error}")
@@ -75,22 +79,22 @@ async def on_message(message):
     # if not in server or user is bot, ignore
     if message.author.bot or not message.guild:
         return
-    
+
     # if user is not verified, start verif process
     if message.content and not await functions.is_verified(message.author):
         await generate_invite(message.author)
         await message.delete()
         return
-    
+
     # setup user data if it doesn't already exist
     await functions.setup_data(message.author)
-    
+
     # interpret command if starts with prefix
     if message.content.startswith(data.prefix):
         command_exists = await interpret_command(message)
         if not command_exists:
             await message.add_reaction("❌")
-    
+
     # check message for spam, award points and such
     await messages.handle(message)
 
@@ -135,6 +139,25 @@ async def on_member_join(member):
 @client.event
 async def on_ready():
     await client.change_presence(activity = discord.Game(name = data.rich_presence))
+
+@client.event
+async def on_message_delete(message):
+    log = "**User:** %s (%s)\n" % (message.author.mention, message.author.id)
+    log += "**Channel:** %s (%s)\n" % (message.channel.mention, message.channel.id)
+    log += "**Time:** %s\n" % (datetime.datetime.utcnow().strftime('%d %b %Y, %H:%M UTC'))
+    log += "**Message:** %s\n" % (message.content)
+    await functions.send_embed(client.get_channel(data.message_logs), "Message Deleted", log)
+
+@client.event
+async def on_message_edit(pre_message, post_message):
+    if pre_message.content != post_message.content:
+        log = "**User:** %s (%s)\n" % (pre_message.author.mention, pre_message.author.id)
+        log += "**Channel:** %s (%s)\n" % (pre_message.channel.mention, pre_message.channel.id)
+        log += "**Time:** %s\n" % (datetime.datetime.utcnow().strftime('%d %b %Y, %H:%M UTC'))
+        log += "**Pre-edit Message:** %s\n" % (pre_message.content)
+        log += "**Post-edit Message:** %s\n" % (post_message.content)
+
+        await functions.send_embed(client.get_channel(data.message_logs), "Message Edited", log)
 
 
 # determine which bot token to use & start bot
