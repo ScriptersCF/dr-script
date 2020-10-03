@@ -2,6 +2,10 @@
 
 Thank you in advance to those that choose to help us with our bot. Users that send in accepted pull requests will be rewarded with the `Open Source Dev` role in our [Discord server](https://discord.gg/N9GRpSC) if interested.
 
+________
+
+**Important:** When testing the bot, it is easiest to give it **Administrator** permissions. You will also need to change `general_channel` and `verified` in `data.py` to a test channel ID and test role that you need to have assigned to you, otherwise the bot will throw an error due to our invite-based verification process.
+
 _________
 
 We don't currently have too many rules for contributions, but we ask that you follow these to make things as easy for us as possible.
