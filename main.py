@@ -146,7 +146,7 @@ async def on_message_delete(message):
     log += "**Channel:** %s (%s)\n" % (message.channel.mention, message.channel.id)
     log += "**Time:** %s\n" % (datetime.datetime.utcnow().strftime('%d %b %Y, %H:%M UTC'))
     log += "**Message:** %s\n" % (message.content)
-    await functions.send_embed(client.get_channel(data.logs_channel), "Message Deleted", log)
+    await functions.send_embed(client.get_channel(data.message_logs), "Message Deleted", log)
 
 @client.event
 async def on_message_edit(pre_message, post_message):
@@ -157,7 +157,7 @@ async def on_message_edit(pre_message, post_message):
         log += "**Pre-edit Message:** %s\n" % (pre_message.content)
         log += "**Post-edit Message:** %s\n" % (post_message.content)
 
-        await functions.send_embed(client.get_channel(data.logs_channel), "Message Edited", log)
+        await functions.send_embed(client.get_channel(data.message_logs), "Message Edited", log)
 
 
 # determine which bot token to use & start bot
