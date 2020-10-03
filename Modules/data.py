@@ -8,7 +8,7 @@ rich_presence = "www.scf.cx/bot"
 token = ""
 test_token = ""
 
-muted = 637330543947546624#335171382428303360
+muted = 335171382428303360
 aban = 550114698297737216
 shban = 416786636118949918
 
