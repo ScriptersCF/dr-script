@@ -3,7 +3,9 @@ The source code for the work-in-progress bot that we use in our Discord server.
 
 ## To-do list
 *Contributions are welcome, feel free to check to [ScriptersCF/Discord_Bot/scf.py](https://github.com/ScriptersCF/Discord_Bot/blob/master/bot.py) for reference.*
-- Log deleted + edited chat messages
+
+Please check the bot [issues](https://github.com/ScriptersCF/mr-script-bot/issues) page to see what we're looking for help with.
+<!--- Log deleted + edited chat messages
 - !stats command for everyone to view their stats
 - !addpoints command for moderators to give user points
 - !unaban and !unshban command for moderators to remove s&h ban and a-ban
@@ -14,3 +16,4 @@ The source code for the work-in-progress bot that we use in our Discord server.
 - Automatically give user roles e.g. Verif lvl. 2, Regular, 10k Club
 - Anti-spam feature that can mute users for too many messages within a certain period of time
 - Automatically award users with relevant donator roles when they donate via webhook, or nitro boost server
+-->
