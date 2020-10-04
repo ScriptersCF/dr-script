@@ -1,5 +1,6 @@
 import discord, json
 from Modules import functions, data
+import urllib
 
 
 async def help(message):
@@ -41,6 +42,57 @@ async def scripter(message):
     role = message.guild.get_role(data.scripter)
     await message.author.add_roles(role)
     await message.add_reaction("👍")
+
+def get_roblex_username(ID): 
+    try:
+        Data = json.loads(
+            urllib.request.urlopen(
+                urllib.request.Request(
+                    "https://verify.eryn.io/api/user/" + ID, 
+                    data=None, 
+                    headers={
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36'
+                    }
+                )
+            ).read().decode("utf-8")
+        )
+        return "[" + Data["robloxUsername"] + "](https://roblox.com/users/" + str(Data["robloxId"]) + ")"
+    except Exception as e:
+        print("6",e)
+        return "N/A"
+
+async def info(message):
+    user_id = (await functions.get_arguments(message))[0]
+
+    user_dict = {
+        "mutes": 0,
+        "kicks": 0,
+        "bans": 0,
+        "aBans": 0,
+        "shBans": 0,
+    }
+
+    user_data = functions.get_data(
+        "SELECT mutes, kicks, bans, aBans, shBans FROM scores WHERE userId = (?)",
+        (user_id,),
+    )
+
+    for item, key in zip(user_data, user_dict.keys()):
+        user_dict[key] = item
+    
+    await functions.send_embed(
+        message.channel,
+        "Info",
+        f"""
+        **User**: <@{user_id}>
+        **Roblox**: {get_roblex_username(user_id)}
+        **Mutes**: {str(user_dict["mutes"])}
+        **Kicks**: {str(user_dict["kicks"])}
+        **Bans**: {str(user_dict["bans"])}
+        **Ac. Bans**: {str(user_dict["aBans"])}
+        **S&H Bans**: {str(user_dict["shBans"])}
+        """,
+    )
 
 
 async def learner(message):

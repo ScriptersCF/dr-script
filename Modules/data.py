@@ -71,12 +71,13 @@ command_aliases = {
     "help": "help",
     "cmds": "help",
     "commands": "help",
-    "info": "help",
 
     #"changecolour": "changecolour",
     #"changecolor": "changecolour",
     #"colorlist": "colourlist",
     #"colourlist": "colourlist",
+    
+    "info": "info",
 
     "toggle": "toggle",
 
@@ -140,6 +141,7 @@ help_message = """`!help` - Displays general help for the Mr. Script bot.
 
 **Commands**
 `!stats @user OR <num>` - Displays the user's stats.
+`!info <num> - Displays the user's info.
 `!leaderboard` - Displays the top 10 most active server members.
 `!report @user <reason>` - Reports a user for breaking our rules.
 `!roll 5d3` - Rolls 5 3-sided dice.

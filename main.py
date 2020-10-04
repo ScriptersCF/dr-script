@@ -13,6 +13,7 @@ command_list = {
     "notforhire": {"run": commands.notforhire, "requirement": ["Verified"]},
     "scripter": {"run": commands.scripter, "requirement": ["Verified"]},
     "learner": {"run": commands.learner, "requirement": ["Verified"]},
+    "info": {"run": commands.info, "requirement": ["Moderator"]},
 
     "mute": {"run": punishments.mute, "requirement": ["Moderator", "Trial Moderator"]},
     "kick": {"run": punishments.kick, "requirement": ["Moderator"]},
