@@ -113,3 +113,24 @@ async def changecolor(message):
                     except:
                         await functions.send_error(message.channel, "An error occurred, try again later.")
                         return False
+
+
+async def derole(message):
+    role = message.guild.get_role(data.gamejam)
+    msg = await functions.send_embed(message.channel, "✋ Okay hang on!", "Attempting to remove gamejam participant role.")
+
+    if role.members:
+        fails = []
+
+        for member in role.members:
+            try:
+                await member.remove_roles(role)
+            except:
+                fails.append("%s#%s" % (member.name, member.discriminator))
+        else:
+            if fails:
+                await msg.edit(embed=discord.Embed(title="⚠️ Error removing gamejam particpant role from:", description="```{}```".format(fails), colour = 0x0094FF))
+            else:
+                await msg.edit(embed=discord.Embed(title="Success! 👍", description="All the gamejam participant roles have been removed.", colour = 0x0094FF))
+    else:
+        await msg.edit(embed=discord.Embed(title="⚠️ No one has the gamejam particpant role.", colour = 0x0094FF))
