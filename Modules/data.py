@@ -17,6 +17,7 @@ forhire = 374610760032321537
 notforhire = 374610878940708864
 scripter = 308611398672318475
 learner = 391938933841199104
+gamejam = 350934544628580362
 
 no_server = 676921838181548083
 no_gamejam = 678974586951565312
@@ -105,6 +106,7 @@ command_aliases = {
     "unlock": "unlock",
     "clear": "clear",
     "report": "report",
+    "derole": "derole",
 
     "stats": "stats",
     "points": "stats",

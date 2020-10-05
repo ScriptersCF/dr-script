@@ -22,6 +22,7 @@ command_list = {
     "unmute": {"run": punishments.unmute, "requirement": ["Moderator"]},
     "clear": {"run": messages.clear, "requirement": ["Moderator"]},
     "report": {"run": punishments.report, "requirement": ["Verified"]},
+    "derole": {"run": commands.derole, "requirement": ["Administrator"]},
 
     "stats": {"run": messages.stats, "requirement": ["Verified"]}
 }
