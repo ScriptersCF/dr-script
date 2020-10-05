@@ -88,13 +88,17 @@ async def stats(message):
 
 async def resetstats(message):
     # reset user's stats (testing purposes only)
-    existing_data = get_data("SELECT * FROM scores WHERE userId = (?)", (user.id,))
-    if not existing_data:
-        set_data(
-            "INSERT INTO scores (userId, points, level) VALUES ((?), (?), (?))",
-            (str(user.id), 1, 1)
-        )
-    await message.channel.send('Your stats have been deleted!')
+    set_data(
+        "INSERT INTO scores (userId, points, level) VALUES ((?), (?), (?))",
+        (str(message.author.id), 1, 1)
+    )
+
+    # format
+    await functions.send_embed(
+        message.channel,
+        "Reset Successful",
+        f"""**Your stats have been reset!**"""
+    )
 
 async def handle(message):
     global last_check_time
