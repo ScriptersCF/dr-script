@@ -86,20 +86,6 @@ async def stats(message):
         **Points:** {user_data[1]}"""
     )
 
-async def resetstats(message):
-    # reset user's stats (testing purposes only)
-    set_data(
-        "INSERT INTO scores (userId, points, level) VALUES ((?), (?), (?))",
-        (str(message.author.id), 1, 1)
-    )
-
-    # format
-    await functions.send_embed(
-        message.channel,
-        "Reset Successful",
-        f"""**Your stats have been reset!**"""
-    )
-
 async def handle(message):
     global last_check_time
 

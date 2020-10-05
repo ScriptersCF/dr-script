@@ -24,7 +24,6 @@ command_list = {
     "report": {"run": punishments.report, "requirement": ["Verified"]},
 
     "stats": {"run": messages.stats, "requirement": ["Verified"]},
-    "reset": {"run": messages.resetstats, "requirement": ["Verified"]},
 }
 
 
