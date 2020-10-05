@@ -31,6 +31,7 @@ command_list = {
 async def interpret_command(message):
     # check if command exists & get proper command name
     inputted_command = message.content.lower().split()[0]
+    await message.channel.send(inputted_command)
 
     for name in data.command_aliases:
         if name == inputted_command[len(data.prefix):]:
