@@ -1,7 +1,6 @@
 import discord, json
 from Modules import functions, data
 
-
 async def help(message):
     # send user the help message
     await functions.send_embed(message.author, "Help", data.help_message)
