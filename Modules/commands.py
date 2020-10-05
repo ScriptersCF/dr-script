@@ -62,7 +62,15 @@ def get_roblex_username(ID):
         return "N/A"
 
 async def info(message):
-    user_id = (await functions.get_arguments(message))[0]
+    user_id_str = (await functions.get_arguments(message))[0]
+
+    try:
+        user_id = int(user_id_str)
+        member = message.guild.get_member(user_id)
+        joined_date = member.joined_at
+        joined_str = joined_date.strftime("%m/%d/%Y") 
+    except:
+        joined_str = "N/A"
 
     user_dict = {
         "mutes": 0,
@@ -84,8 +92,9 @@ async def info(message):
         message.channel,
         "Info",
         f"""
-        **User**: <@{user_id}>
-        **Roblox**: {get_roblex_username(user_id)}
+        **User**: <@{user_id_str}>
+        **Roblox**: {get_roblex_username(user_id_str)}
+        **join date**: {joined_str}
         **Mutes**: {str(user_dict["mutes"])}
         **Kicks**: {str(user_dict["kicks"])}
         **Bans**: {str(user_dict["bans"])}
