@@ -19,6 +19,8 @@ command_list = {
     "ban": {"run": punishments.ban, "requirement": ["Administrator", "Senior Moderator"]},
     "aban": {"run": punishments.aban, "requirement": ["Moderator"]},
     "shban": {"run": punishments.shban, "requirement": ["Moderator"]},
+    "aunban": {"run": punishments.aunban, "requirement": ["Moderator"]},
+    "shunban": {"run": punishments.shunban, "requirement": ["Moderator"]},
     "unmute": {"run": punishments.unmute, "requirement": ["Moderator"]},
     "clear": {"run": messages.clear, "requirement": ["Moderator"]},
     "report": {"run": punishments.report, "requirement": ["Verified"]},
