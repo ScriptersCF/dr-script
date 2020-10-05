@@ -7,7 +7,9 @@ async def help(message):
     
 async def how(message, *, args):
     # lmgtfy
-
+    
+    args = await functions.remove_tags(args) 
+    
     # I don't want people abusing this, so let's add some guards:
     # i) Length: long links are annoying and can be used for spam.
     if len(args) > 100: 
@@ -166,3 +168,6 @@ async def derole(message):
                 await msg.edit(embed=discord.Embed(title="Success! 👍", description="All the gamejam participant roles have been removed.", colour = 0x0094FF))
     else:
         await msg.edit(embed=discord.Embed(title="⚠️ No one has the gamejam participant role.", colour = 0x0094FF))
+
+# I love Josh,
+# from fly.
