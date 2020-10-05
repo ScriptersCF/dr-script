@@ -177,6 +177,53 @@ async def ban(message):
     else:
         await functions.send_error(message.channel, f"{str(failure_count)} user was not banned.")
 
+async def shunban(message):
+    # get arguments, stop function if none are found
+    arguments = await functions.get_arguments(message)
+    if not arguments:
+        return
+    
+    failure_count = 0
+    targets = []
+
+    # check for targets and add to list
+    for argument in arguments:
+        if argument.startswith("<@"):
+            targets.append(message.mentions[len(targets)])
+        
+    # iterate through targets, ignore user if moderator
+    for target in targets:
+        try:
+            await functions.setup_data(target)
+            
+            # increase user's aban count, set length if not inf and dm user
+           # await functions.set_punish_time(target, "aban", length, 0)
+            await functions.send_embed(
+                target, "ScriptersCF",
+                f"You have been **unbanned from Selling and Hiring** in ScriptersCF"
+            )
+
+            # remove user's aban role
+            role = message.guild.get_role(data.shban)
+            await target.remove_roles(role)        
+        # otherwise, increase failure count to warn moderator
+        except:
+            failure_count += 1
+    
+    # log kicked targets + reason in logs channel
+    await functions.send_embed(
+        message.guild.get_channel(data.logs_channel),
+        "Selling and Hiring Unban",
+        f"""**Moderator:** <@{str(message.author.id)}>
+        **Targets:** """ + ", ".join([f"<@{target.id}>" for target in targets]) + """
+        """
+    )
+
+    # tell user whether successful or not
+    if failure_count == 0:
+        await message.add_reaction("👍")
+    else:
+        await functions.send_error(message.channel, f"{str(failure_count)} user was not unbanned from Selling and Hiring.")
 
 async def shban(message):
     # get arguments, stop function if none are found
@@ -242,6 +289,53 @@ async def shban(message):
     else:
         await functions.send_error(message.channel, f"{str(failure_count)} user was not banned from selling & hiring.")
 
+async def aunban(message):
+    # get arguments, stop function if none are found
+    arguments = await functions.get_arguments(message)
+    if not arguments:
+        return
+    
+    failure_count = 0
+    targets = []
+
+    # check for targets and add to list
+    for argument in arguments:
+        if argument.startswith("<@"):
+            targets.append(message.mentions[len(targets)])
+        
+    # iterate through targets, ignore user if moderator
+    for target in targets:
+        try:
+            await functions.setup_data(target)
+            
+            # increase user's aban count, set length if not inf and dm user
+           # await functions.set_punish_time(target, "aban", length, 1)
+            await functions.send_embed(
+                target, "ScriptersCF",
+                f"You have been **unbanned from academics channels** in ScriptersCF"
+            )
+
+            # remove user's aban role
+            role = message.guild.get_role(data.aban)
+            await target.remove_roles(role)        
+        # otherwise, increase failure count to warn moderator
+        except:
+            failure_count += 1
+    
+    # log kicked targets + reason in logs channel
+    await functions.send_embed(
+        message.guild.get_channel(data.logs_channel),
+        "Academics Unban",
+        f"""**Moderator:** <@{str(message.author.id)}>
+        **Targets:** """ + ", ".join([f"<@{target.id}>" for target in targets]) + """
+        """
+    )
+
+    # tell user whether successful or not
+    if failure_count == 0:
+        await message.add_reaction("👍")
+    else:
+        await functions.send_error(message.channel, f"{str(failure_count)} user was not unbanned from Academics.")
 
 async def aban(message):
     # get arguments, stop function if none are found
