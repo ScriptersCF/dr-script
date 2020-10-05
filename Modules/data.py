@@ -108,8 +108,7 @@ command_aliases = {
 
     "stats": "stats",
     "points": "stats",
-    "level": "stats",
-    "reset": "reset"
+    "level": "stats"
 }
 
 punishment_names = {
@@ -141,7 +140,6 @@ help_message = """`!help` - Displays general help for the Mr. Script bot.
 
 **Commands**
 `!stats @user OR <num>` - Displays the user's stats.
-`!reset` - Resets user's stats.
 `!leaderboard` - Displays the top 10 most active server members.
 `!report @user <reason>` - Reports a user for breaking our rules.
 `!roll 5d3` - Rolls 5 3-sided dice.
