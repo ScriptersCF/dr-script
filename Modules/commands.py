@@ -161,8 +161,8 @@ async def derole(message):
                 fails.append("%s#%s" % (member.name, member.discriminator))
         else:
             if fails:
-                await msg.edit(embed=discord.Embed(title="⚠️ Error removing gamejam particpant role from:", description="```{}```".format(fails), colour = 0x0094FF))
+                await msg.edit(embed=discord.Embed(title="⚠️ Error removing gamejam participant role from:", description="```{}```".format(fails), colour = 0x0094FF))
             else:
                 await msg.edit(embed=discord.Embed(title="Success! 👍", description="All the gamejam participant roles have been removed.", colour = 0x0094FF))
     else:
-        await msg.edit(embed=discord.Embed(title="⚠️ No one has the gamejam particpant role.", colour = 0x0094FF))
+        await msg.edit(embed=discord.Embed(title="⚠️ No one has the gamejam participant role.", colour = 0x0094FF))
