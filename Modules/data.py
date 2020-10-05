@@ -101,9 +101,13 @@ command_aliases = {
     "ban": "ban",
     "aban": "aban",
     "shban": "shban",
+    
     "aunban": "aunban",
     "shunban": "shunban",
+    "unaban": "aunban",
+    "unshban": "shunban",
     "unmute": "unmute",
+    
     "lock": "lock",
     "unlock": "unlock",
     "clear": "clear",
