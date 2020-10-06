@@ -107,22 +107,26 @@ async def toggle_role(message, role_id):
 
 
 async def increase_count(target, column_type, amount):
-    # get amount of times that punishment has taken place and increase by 1
-    current_amount = get_data(
+    # get amount of times that data has taken place and increase by <amount>
+    #sql gross LOL who did this XD
+    old_amount = get_data(
         f"SELECT {column_type}s FROM scores WHERE userId = (?)",
         (str(target.id), )
     )[0] or 0
-
+ 
     set_data(
         f"UPDATE scores SET {column_type}s = (?) WHERE userId = (?)",
-        (str(current_amount + amount), str(target.id))
+        (str(old_amount + amount), str(target.id))
     )
+    
+    new_amount = str(old_amount + amount)
+    return old_amount, new_amount
 
 
 async def set_punish_time(target, punish_type, length, multiply):
     # set end_time to time that punishment should end
     end_time = int(time.time() + int(length) * multiply) if length != "∞" else 10 ** 10
-    current_data = get_data("SELECT * FROM punishments WHERE userId = (?)", (str(target.id), ))
+    current_data = get_data("SELECT * FROM punishments WHERE userId = (?)", (str(taprget.id), ))
 
     # if user has no active punishments, add row to database
     if not current_data:
@@ -133,3 +137,44 @@ async def set_punish_time(target, punish_type, length, multiply):
         f"UPDATE punishments SET {punish_type}End = (?) WHERE userId = (?)",
         (str(end_time), str(target.id))
     )
+    
+    
+async def give_role(message, role_id): # This is different from toggle_role()
+    role = message.guild.get_role(role_id)
+    if role in message.author.roles:
+        await message.author.add_roles(role)
+        return True
+    
+    
+async def get_level_from_points(user_points):
+    return 1 + (math.floor(0.3 * math.sqrt(user_points)))
+
+
+async def get_player_embed(user, xp):
+    user_and_discriminator = user.name + "#" + user.discriminator
+    user_avatar = user.avatar_url
+    
+    level = 1 + (math.floor(0.3 * math.sqrt(xp)))
+    next_level = level + 1
+    needed_xp = (10*(next_level - 1)/3)**2
+
+    percentage = xp/needed_xp
+    emojis = "" 
+
+    for i in range(1, math.floor(percentage*10) + 1):
+        emojis += :white_large_square:
+
+    for i in range(1, 10 - math.floor(percentage*10) + 1):
+        emojis += :black_large_square:
+
+    embed = discord.Embed(
+        colour = discord.Colour(0x76adf1),
+        description = emojis
+    )
+
+    embed.set_author(name = user_and_discriminator, icon_url = user_avatar)
+    embed.set_thumbnail(url = user_avatar)
+    embed.add_field(name = "**Level**", value = level, inline = True)
+    embed.add_field(name = "**Points**", value = f"{xp}/{needed_xp} XP" inline = True)
+    
+    return embed
