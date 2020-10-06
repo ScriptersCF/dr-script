@@ -9,6 +9,8 @@ async def how(message):
     # lmgtfy
     
     args = await functions.get_arguments(message)
+    if not args:
+        return
     args = " ".join(args)
 
     # I don't want people abusing this, so let's add some guards:
