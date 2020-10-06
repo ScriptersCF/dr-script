@@ -61,6 +61,9 @@ async def process_auto_roles(new_points):
     elif role_id == 550880780776374296: # 100k+ Points
         await give_role(message, 639147821273972736) # Additionally give custom Gold role
         
+    elif not role_id:
+        return None
+        
     # Handle all cases  
     return await give_role(message, role_id)
 
