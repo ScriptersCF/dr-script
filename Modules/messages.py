@@ -71,7 +71,7 @@ async def process_auto_roles(message, new_points):
 
 async def award_points(message):
     # Handle point awarding process.
-    if not len(message.content) >= 1: # Check message length!
+    if not len(message.content) >= 10: # Check message length!
         return
     
     point_amount = 1 # Default at 1
@@ -133,7 +133,7 @@ async def handle(message):
 
     await award_points(message)
 
-    # if 15 seconds has passed since last message, call funcs + reset
+    # if <check_cooldown> seconds has passed since last message, call funcs + reset
     current_time = int(time())
     if current_time >= last_check_time + data.check_cooldown:
         last_check_time = current_time
