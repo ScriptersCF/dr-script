@@ -156,11 +156,17 @@ async def get_player_embed(user, xp):
     
     level = 1 + (math.floor(0.3 * math.sqrt(xp)))
     next_level = level + 1
-    needed_xp = (10*(next_level - 1)/3)**2
 
-    percentage = xp/needed_xp
-    emojis = "" 
-
+    next_xp = ((level)/0.3)**2
+    percentage_xp = xp/next_xp
+    
+    emojis = ""
+    for i in range(10):
+        if i < math.floor(percentage_xp * 10):
+            emojis += :white_large_square
+        else:
+            emojis += :black_large_square:                   
+                
     for i in range(1, math.floor(percentage*10) + 1):
         emojis += :white_large_square:
 
@@ -175,6 +181,6 @@ async def get_player_embed(user, xp):
     embed.set_author(name = user_and_discriminator, icon_url = user_avatar)
     embed.set_thumbnail(url = user_avatar)
     embed.add_field(name = "**Level**", value = level, inline = True)
-    embed.add_field(name = "**Points**", value = f"{xp}/{needed_xp} XP" inline = True)
+    embed.add_field(name = "**Points**", value = f"{xp}/{next_xp} XP" inline = True)
     
     return embed
