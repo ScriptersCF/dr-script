@@ -1,6 +1,8 @@
 import discord, asyncio, aiohttp, sqlite3, json, requests, csv, time, datetime
 from discord import Webhook, RequestsWebhookAdapter
-client = discord.Client()
+intents = discord.Intents.default()
+intents.members = True
+client = discord.Client(intents=intents)
 
 from Modules import commands, data, functions, messages, punishments
 private_invites = {}
@@ -94,6 +96,10 @@ async def on_message(message):
         command_exists = await interpret_command(message)
         if not command_exists:
             await message.add_reaction("❌")
+    
+    # check if message is a donation
+    if message.channel.id == data.donation_channel:
+        await messages.check_donation(message)
 
     # check message for spam, award points and such
     await messages.handle(message)
@@ -116,6 +122,26 @@ async def on_member_update(before, after):
     except:
         0
 
+    # check if user is boosting server, give role if so
+    try:
+        if await functions.is_boosted(after) and not await functions.is_boosted(before):
+            custom = after.guild.get_role(data.custom_gold)
+            if not any("Custom // Gold" in role.name for role in after.roles):
+                await after.add_roles(custom)
+                await functions.send_embed(
+                    after,
+                    "ScriptersCF",
+                    """Thank you for boosting the server!
+                    You have also been awarded a custom colour role."""
+                )
+        elif not await functions.is_boosted(after) and await functions.is_boosted(before):
+            plus = after.guild.get_role(data.donator_plus)
+            if plus not in after.roles:
+                for role in after.roles:
+                    if "Custom //" in role:
+                        await role.delete(reason="Nitro boost expired, insufficient roles")
+    except:
+        0
 
 @client.event
 async def on_member_join(member):

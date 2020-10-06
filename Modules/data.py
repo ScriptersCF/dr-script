@@ -6,7 +6,7 @@ version = "Mr. Script 0.21" + bot_type
 rich_presence = "www.scf.cx/bot"
 
 token = ""
-test_token = ""
+test_token = "NzYyNTIzMTE0OTM5NjEzMjA0.X3qY_Q.c89ULQIFSO0dR8B53aL2elz-7RI"
 
 muted = 335171382428303360
 aban = 550114698297737216
@@ -18,6 +18,10 @@ notforhire = 374610878940708864
 scripter = 308611398672318475
 learner = 391938933841199104
 
+donator = 762771444329349121
+donator_plus = 762771450028752896
+custom_gold = 762771451534770186
+
 no_server = 676921838181548083
 no_gamejam = 678974586951565312
 no_event = 676921944880185365
@@ -25,6 +29,7 @@ no_event = 676921944880185365
 general_channel = 762530852977901622
 logs_channel = 332883332528603146
 message_logs = 370937658920271874
+donation_channel = 762564015444197437
 
 channel_points = {
     349255881977757696: 0,

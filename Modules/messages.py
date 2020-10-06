@@ -1,3 +1,4 @@
+import json
 from Modules import functions, data
 from time import time
 
@@ -96,3 +97,12 @@ async def handle(message):
     if current_time >= last_check_time + data.check_cooldown:
         last_check_time = current_time
         await check_punishments(message.guild)
+
+async def check_donation(message):
+    data = json.loads(message.content.split("\n")[0])
+    amount = data["amount"]
+
+    # match sent user with each member in server
+    async for member in message.guild.fetch_members():
+        if member.name + "#" + member.discriminator == data["user"]:
+            await functions.donation(member, amount)
