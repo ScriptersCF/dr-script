@@ -167,7 +167,7 @@ async def get_user_embed(user, xp, level_up, new_role):
     
     if new_role:
         # Increment description if user got a new xp role.
-        description += f"You were awarded the following role: `{new_role}`
+        description += f"You were awarded the following role: `{new_role}`"
     
     # Progress bar:
     emojis = "\n\n" # Escape and skip line
@@ -189,6 +189,6 @@ async def get_user_embed(user, xp, level_up, new_role):
     embed.set_author(name = user_and_discriminator, icon_url = user_avatar)
     embed.set_thumbnail(url = user_avatar)
     embed.add_field(name = "**Level**", value = level, inline = True)
-    embed.add_field(name = "**Points**", value = f"{xp}/{next_xp} XP" inline = True)
+    embed.add_field(name = "**Points**", value = f"{xp}/{next_xp} XP", inline = True)
     
     return embed
