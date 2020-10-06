@@ -8,6 +8,9 @@ rich_presence = "www.scf.cx/bot"
 token = ""
 test_token = ""
 
+regular = 322102125402259456
+gold_role = 639147821273972736
+
 muted = 335171382428303360
 aban = 550114698297737216
 shban = 416786636118949918
@@ -44,6 +47,15 @@ channel_points = {
     639153031619018752: 3
 }
 
+xp_roles = {
+    352799502379253772: 30, # (+3 days in the server) Verified Lvl. 2  
+    322102125402259456: 2000, # Regular
+    642852174854094868: 10000, #10k+ Club
+    642852176628285455: 20000, #20k+ Club
+    642852191606013963: 50000, #50k+ Club
+    550880780776374296: 100000, # 100k+ Club (Also add 'Custom // Gold' role)
+}
+
 color_list = {
     "Maroon",
     "Red",
@@ -73,6 +85,8 @@ command_aliases = {
     "cmds": "help",
     "commands": "help",
     "info": "help",
+
+    "how": "how",
 
     #"changecolour": "changecolour",
     #"changecolor": "changecolour",
