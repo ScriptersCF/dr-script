@@ -1,3 +1,4 @@
+import math
 from Modules import functions, data
 from time import time
 
@@ -48,11 +49,20 @@ async def award_points(message):
     # check message length and get points for channel
     if len(message.content) >= 10:
         if message.channel.id in data.channel_points:
-            point_amount = data.channel_points[message.channel.id]
-
-        # update db
-        await functions.increase_count(message.author, "point", point_amount)
-
+            point_amount = data.channel_points[message.channel.id] 
+          
+        # update db and retrieve updated value
+        old_points, new_points = await functions.increase_count(message.author, "point", point_amount)
+        
+        if new_points >= 3000:
+            functions.give_role(message.author, data.Regular) # SCRIPT THIS YES
+        
+        old_level = await functions.get_level_from_points(old_points)
+        new_level = await functions.get_level_from_points(new_points)
+        
+        if new_level > old_level:
+            functions.get_player_embed(message.author, new_points, new_level)
+            # omg user has higher level!
 
 async def clear(message):
     # set amount of messages to delete with cap of 100, + message from mod
