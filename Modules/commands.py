@@ -1,5 +1,46 @@
-import discord, json
+import discord, json, requests, io, datetime
 from Modules import functions, data
+from PIL import Image
+
+def execute(Type, Command):
+    Database = sqlite3.connect("scores.sqlite")
+    Cursor = Database.cursor()
+    Cursor.execute(Command)
+    if Type == "Get":
+        AllData = Cursor.fetchall()
+        Database.close()
+        return AllData
+    elif Type == "Set":
+        Database.commit()
+        Database.close()
+
+async def stats(Message, Args):
+    User = Message.author
+    try:
+        if Args[0][:2] == "<@":
+            User = Message.mentions[0]
+        elif Args[0].isdigit():
+            if int(Args[0]) < 1000000:
+                User = await GetUserFromRank(int(Args[0]))
+            else:
+                User = server.get_member(Args[0])
+    except Exception as e:
+        print("5",e)
+    Data = Execute(
+        "Get",
+        "SELECT * FROM scores WHERE userId = \"" + User.id + "\""
+    )
+    JoinDate = "30 May 2017" if User.id == "356836476777922562" else User.joined_at.strftime('%d %b %Y')
+    await SendLevelMsg(
+        User,
+        Message.channel,
+        "Stats",
+        "**User**: <@" + User.id + """>
+**Level**: """ + str(Data[0][2]) + """
+**Points**: """ + str(Data[0][1]) + """
+**Rank**: """ + str(await GetRank(User)) + """
+**Joined**: """ + JoinDate + "\n**Staff Member** ✔️\n" * (await GetLevel(User) >= 4)
+    )
 
 
 async def help(message):
@@ -88,6 +129,53 @@ async def colourlist(message):
         "https://cdn.discordapp.com/attachments/306153640023031820/740004654368424066/unknown.png"
     )
 
+# taken from https://note.nkmk.me/en/python-pillow-add-margin-expand-canvas/
+def add_margin(pil_img, top, right, bottom, left, color):
+    width, height = pil_img.size
+    new_width = width + right + left
+    new_height = height + top + bottom
+    result = Image.new(pil_img.mode, (new_width, new_height), color)
+    result.paste(pil_img, (left, top))
+    return result
+
+async def generate_latex(message):
+    # predefine URL, including the default DPI for the image and the background color to be white
+    url = 'https://latex.codecogs.com/gif.latex?\\dpi{{500}}\\bg_white\\{}'
+
+    # parses the message, removes the initial command
+    equation = message.content.replace('!latex ', '')
+
+    await message.channel.send('Processing your request: {}'.format(equation))
+
+    # requests the LaTeX to be generated, in stream mode
+    r = requests.get(url.format(equation), stream=True)
+    
+    # check if status_code of request was not 200, if it is not, an error occurred
+    if r.status_code != 200:
+        if r.status_code == 400:
+            await message.channel.send('Error while requesting LaTeX file. Status code: {} \nPlease check formatting of equation and try again.'.format(r.status_code)) 
+        else:
+            await message.channel.send('Error while requesting LaTeX file. Status code {}'.format(r.status_code)) 
+        return
+
+    # take the binary content of the request and put it into a bytes object   
+    bytes = io.BytesIO(r.content)
+
+    # open the bytes as a PIL Image object to add margins
+    img = Image.open(bytes)
+    new_img = add_margin(img, 10, 30, 10, 30, (255,255,255))
+
+    # turn updated PIL Image object back to bytes
+    new_bytes = io.BytesIO()
+    new_img.save(new_bytes, 'PNG')
+    new_bytes.seek(0)
+
+    # create discord.File object in .png format
+    file = discord.File(new_bytes, (str(datetime.datetime.now()) + '.png' ))
+
+    # send image in channel
+    await message.channel.send(file=file)
+    
 
 async def changecolor(message):
     arguments = await functions.get_arguments(message)
@@ -113,24 +201,3 @@ async def changecolor(message):
                     except:
                         await functions.send_error(message.channel, "An error occurred, try again later.")
                         return False
-
-
-async def derole(message):
-    role = message.guild.get_role(data.gamejam)
-    msg = await functions.send_embed(message.channel, "✋ Okay hang on!", "Attempting to remove gamejam participant role.")
-
-    if role.members:
-        fails = []
-
-        for member in role.members:
-            try:
-                await member.remove_roles(role)
-            except:
-                fails.append("%s#%s" % (member.name, member.discriminator))
-        else:
-            if fails:
-                await msg.edit(embed=discord.Embed(title="⚠️ Error removing gamejam particpant role from:", description="```{}```".format(fails), colour = 0x0094FF))
-            else:
-                await msg.edit(embed=discord.Embed(title="Success! 👍", description="All the gamejam participant roles have been removed.", colour = 0x0094FF))
-    else:
-        await msg.edit(embed=discord.Embed(title="⚠️ No one has the gamejam particpant role.", colour = 0x0094FF))
