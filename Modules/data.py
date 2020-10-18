@@ -107,6 +107,7 @@ command_aliases = {
     "clear": "clear",
     "report": "report",
     "derole": "derole",
+    "addpoints": "addpoints",
 
     "stats": "stats",
     "points": "stats",

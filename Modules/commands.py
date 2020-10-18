@@ -1,4 +1,4 @@
-import discord, json
+import discord, json, re
 from Modules import functions, data
 
 
@@ -134,3 +134,19 @@ async def derole(message):
                 await msg.edit(embed=discord.Embed(title="Success! 👍", description="All the gamejam participant roles have been removed.", colour = 0x0094FF))
     else:
         await msg.edit(embed=discord.Embed(title="⚠️ No one has the gamejam particpant role.", colour = 0x0094FF))
+
+
+async def addpoints(message):
+    args = await functions.get_arguments(message)
+    
+    if args:
+        member = message.guild.get_member(int(re.findall(r"\d+", args[0])[0]))
+
+        if member:
+            if len(args) > 1 and args[1].isdigit():
+                await functions.increase_count(member, "point", int(args[1]))
+                await functions.send_embed(message.channel, "Success! 👍", "**{}** points have been added to **{}**".format(args[1], member))
+            else:
+                await functions.send_error(message.channel, "Please provide a valid amount.")
+        else:
+            await functions.send_error(message.channel, "Please provide a valid user.")

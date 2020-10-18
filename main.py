@@ -23,6 +23,7 @@ command_list = {
     "clear": {"run": messages.clear, "requirement": ["Moderator"]},
     "report": {"run": punishments.report, "requirement": ["Verified"]},
     "derole": {"run": commands.derole, "requirement": ["Administrator"]},
+    "addpoints": {"run": commands.addpoints, "requirement": ["Administrator", "Senior Moderator", "Moderator"]},
 
     "stats": {"run": messages.stats, "requirement": ["Verified"]}
 }
