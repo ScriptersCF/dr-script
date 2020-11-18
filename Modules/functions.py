@@ -1,6 +1,16 @@
-import discord, sqlite3, json, time
+import discord, sqlite3, json, time, aiohttp, io
 from Modules import data
 
+async def get_image_file_from_url(url):
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.get(url) as response:
+                buffer = io.BytesIO(await response.read())
+                await session.close()
+                return discord.File(buffer, 'image.png')
+        except:
+            return False
+            
 async def send_embed(channel, title, description):
     try:
         embed = discord.Embed(
