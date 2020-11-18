@@ -9,6 +9,7 @@ async def get_image_file_from_url(url):
                 await session.close()
                 return discord.File(buffer, 'image.png')
         except:
+            await session.close()
             return False
             
 async def send_embed(channel, title, description):
