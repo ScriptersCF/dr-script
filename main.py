@@ -114,6 +114,14 @@ async def on_member_update(before, after):
                         nick = after.nick.replace(hammer, "")
                             or "Unnamed"
                     )
+        if await functions.is_epic(after):
+            if "🌸" not in after.nick:
+                await after.edit(nick = after.nick + " 🌸")
+        else:
+            await after.edit(
+                nick = after.nick.replace("🌸", "")
+                    or "Unnamed"
+            )            
     except:
         0
 
