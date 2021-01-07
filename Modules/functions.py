@@ -87,6 +87,11 @@ async def is_verified(user):
         if role.name == "Verified":
             return True
 
+async def is_epic(user):
+    # iterate through user's role, if user has secret role then return true
+    for role in user.roles:
+        if role.name == "Secret Role":
+            return True
 
 async def get_arguments(message):
     # check message arguments, return error if none given
