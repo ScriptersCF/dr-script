@@ -1,6 +1,10 @@
 import discord, asyncio, aiohttp, sqlite3, json, requests, csv, time, datetime
 from discord import Webhook, RequestsWebhookAdapter
-client = discord.Client()
+
+intents = discord.Intents.default()
+intents.members = True
+
+client = discord.Client(intents = intents)
 
 from Modules import commands, data, functions, messages, punishments
 private_invites = {}
@@ -23,6 +27,7 @@ command_list = {
     "clear": {"run": messages.clear, "requirement": ["Moderator"]},
     "report": {"run": punishments.report, "requirement": ["Verified"]},
     "derole": {"run": commands.derole, "requirement": ["Administrator"]},
+    "addpoints": {"run": commands.addpoints, "requirement": ["Administrator", "Senior Moderator", "Moderator"]},
 
     "stats": {"run": messages.stats, "requirement": ["Verified"]},
     "how": {"run": commands.how, "requirement": ["Verified"]}

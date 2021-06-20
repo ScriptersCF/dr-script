@@ -47,7 +47,7 @@ async def give_role(message, role_id):
     role = message.guild.get_role(int(role_id))
 
     if role:
-        await message.author.add_roles(role)
+        return await message.author.add_roles(role)
 
 
 async def process_auto_roles(message, new_points):
