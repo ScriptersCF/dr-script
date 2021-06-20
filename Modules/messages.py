@@ -43,16 +43,22 @@ async def check_punishments(guild):
             )
 
 
+async def give_role(message, role_id):
+    role = message.guild.get_role(int(role_id))
+
+    if role:
+        await message.author.add_roles(role)
+
+
 async def process_auto_roles(message, new_points):
-    # No point in processing this if xp < 30
-    if new_points < data.xp_roles[352799502379253772]:
+    if new_points < data.xp_roles[352799502379253772]: # No point in processing this if xp < 30
         return None
     
     #  Give highest role that satisfies: user xp >= xp_role
     role_id = list(filter(lambda x: (new_points >= data.xp_roles[x]), data.xp_roles))[-1] 
 
     # Handle special cases:
-    if role_id == 352799502379253772:  # Verified Lvl. 2
+    if role_id == 352799502379253772: # Verified Lvl. 2
         joined_at = message.author.joined_at
         time_now = datetime.datetime.now()      
 
@@ -60,13 +66,13 @@ async def process_auto_roles(message, new_points):
             return None
         
     elif role_id == 550880780776374296: # 100k+ Points
-        await functions.give_role(message, 639147821273972736) # Additionally give custom Gold role
-
+        await give_role(message, 639147821273972736) # Additionally give custom Gold role
+        
     elif not role_id:
         return None
         
     # Handle all cases  
-    return await functions.give_role(message, role_id)
+    return await give_role(message, role_id)
 
 
 async def award_points(message):
@@ -79,19 +85,19 @@ async def award_points(message):
         point_amount = data.channel_points[message.channel.id] # Get points awarded by channel!
 
     # Increment points by <point_amount>
-    old_points, new_points = await functions.increase_count(message.author, "point", point_amount)
-    
+    old_points, new_points = map(int, await functions.increase_count(message.author, "point", point_amount))
+
     # Get user level based on points
-    old_level = await functions.get_level_from_points(int(old_points))
-    new_level = await functions.get_level_from_points(int(new_points))
+    old_level = await functions.get_level_from_points(old_points)
+    new_level = await functions.get_level_from_points(new_points)
     
     # Process auto-role
     new_role = None
-    new_role = await process_auto_roles(message, int(new_points))
+    new_role = await process_auto_roles(message, new_points)
     
     # Process auto-level   
     if new_level > old_level or new_role:
-        embed = await functions.get_user_embed(message.author, int(new_points), new_level > old_level, new_role)
+        embed = await functions.get_user_embed(message.author, new_points, new_level > old_level, new_role)
         await message.channel.send(embed = embed)
 
         
@@ -118,14 +124,8 @@ async def stats(message):
         (str(message.author.id), )
     )
 
-    # format user's stats
-    await functions.send_embed(
-        message.channel,
-        "Stats",
-        f"""**User:** <@{message.author.id}>
-        **Level:** {await functions.get_level_from_points(user_data[1])}
-        **Points:** {user_data[1]}"""
-    )
+    response = await functions.get_user_embed(message.author, user_data[1], False, False)
+    await message.channel.send(embed = response)
 
 
 async def handle(message):
@@ -133,7 +133,7 @@ async def handle(message):
 
     await award_points(message)
 
-    # if <check_cooldown> seconds has passed since last message, call funcs + reset
+    # if 15 seconds has passed since last message, call funcs + reset
     current_time = int(time())
     if current_time >= last_check_time + data.check_cooldown:
         last_check_time = current_time

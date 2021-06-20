@@ -1,5 +1,5 @@
 prefix = "!"
-bot_type = "T"
+bot_type = "R"
 check_cooldown = 25
 
 version = "Mr. Script 0.21" + bot_type
