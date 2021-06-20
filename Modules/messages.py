@@ -43,7 +43,14 @@ async def check_punishments(guild):
             )
 
 
-async def process_auto_roles(new_points):
+async def give_role(message, role_id):
+    role = message.guild.get_role(int(role_id))
+
+    if role:
+        await message.author.add_roles(role_id)
+
+
+async def process_auto_roles(message, new_points):
     if new_points < data.xp_roles[352799502379253772]: # No point in processing this if xp < 30
         return None
     
@@ -86,7 +93,7 @@ async def award_points(message):
     
     # Process auto-role
     new_role = None
-    new_role = await process_auto_roles(new_points)
+    new_role = await process_auto_roles(message, new_points)
     
     # Process auto-level   
     if new_level > old_level or new_role:
