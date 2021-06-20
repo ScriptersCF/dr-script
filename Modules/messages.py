@@ -78,8 +78,8 @@ async def award_points(message):
         point_amount = data.channel_points[message.channel.id] # Get points awarded by channel!
 
     # Increment points by <point_amount>
-    old_points, new_points = await functions.increase_count(message.author, "point", point_amount)
-    
+    old_points, new_points = map(int, await functions.increase_count(message.author, "point", point_amount))
+
     # Get user level based on points
     old_level = await functions.get_level_from_points(old_points)
     new_level = await functions.get_level_from_points(new_points)
@@ -117,14 +117,8 @@ async def stats(message):
         (str(message.author.id), )
     )
 
-    # format user's stats
-    await functions.send_embed(
-        message.channel,
-        "Stats",
-        f"""**User:** <@{message.author.id}>
-        **Level:** {user_data[2]}
-        **Points:** {user_data[1]}"""
-    )
+    response = await functions.get_user_embed(message.author, user_data[1], False, False)
+    await message.channel.send(embed = response)
 
 
 async def handle(message):

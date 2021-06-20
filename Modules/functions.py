@@ -148,7 +148,7 @@ async def give_role(message, role_id): # This is different from toggle_role()
     
 async def get_level_from_points(user_points):
     # Returns user level based on their points
-    return 1 + (math.floor(0.3 * math.sqrt(user_points)))
+    return 1 + (math.floor(0.3 * math.sqrt(int(user_points))))
 
 
 async def get_user_embed(user, xp, level_up, new_role):
