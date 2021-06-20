@@ -24,7 +24,8 @@ command_list = {
     "report": {"run": punishments.report, "requirement": ["Verified"]},
     "derole": {"run": commands.derole, "requirement": ["Administrator"]},
 
-    "stats": {"run": messages.stats, "requirement": ["Verified"]}
+    "stats": {"run": messages.stats, "requirement": ["Verified"]},
+    "how": {"run": commands.how, "requirement": ["Verified"]}
 }
 
 

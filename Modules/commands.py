@@ -1,11 +1,41 @@
 import discord, json
 from Modules import functions, data
 
-
 async def help(message):
     # send user the help message
     await functions.send_embed(message.author, "Help", data.help_message)
+    
+async def how(message):
+    # lmgtfy
+    
+    args = await functions.get_arguments(message)
+    if not args:
+        return
+    args = " ".join(args)
 
+    # I don't want people abusing this, so let's add some guards:
+
+    if len(args) > 100:
+        await functions.send_error(message.channel, "Query too long! Max: 100 characters")
+        return
+  
+    # Creating a google search query link lol
+    new_string = args.replace(" ", "+")
+    query = f"https://www.google.com/search?&q=how+{new_string}"
+
+    # Handling embed
+    embed = discord.Embed(
+        title = "How " + args,
+        colour=0x0094FF,
+        url=query,
+        description=f"Don't worry, it's really easy to do that! **[Click here]({query})** to see how.\n\n_Powered by Google:tm:_"
+    )
+    embed.set_thumbnail(
+        url="https://cdn3.iconfinder.com/data/icons/google-suits-1/32/1_google_search_logo_engine_service_suits-512.png"
+    )
+
+    # Posting to channel and adding reaction
+    await message.channel.send(content=f"Here is the answer for your question:\n{query}", embed=embed)
 
 async def forhire(message):
     # remove "not for hire" role if the user has it
@@ -129,8 +159,11 @@ async def derole(message):
                 fails.append("%s#%s" % (member.name, member.discriminator))
         else:
             if fails:
-                await msg.edit(embed=discord.Embed(title="⚠️ Error removing gamejam particpant role from:", description="```{}```".format(fails), colour = 0x0094FF))
+                await msg.edit(embed=discord.Embed(title="⚠️ Error removing gamejam participant role from:", description="```{}```".format(fails), colour = 0x0094FF))
             else:
                 await msg.edit(embed=discord.Embed(title="Success! 👍", description="All the gamejam participant roles have been removed.", colour = 0x0094FF))
     else:
-        await msg.edit(embed=discord.Embed(title="⚠️ No one has the gamejam particpant role.", colour = 0x0094FF))
+        await msg.edit(embed=discord.Embed(title="⚠️ No one has the gamejam participant role.", colour = 0x0094FF))
+
+# I love Josh,
+# from fly.
