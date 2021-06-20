@@ -26,7 +26,7 @@ async def how(message):
     # Handling embed
     embed = discord.Embed(
         title = "How " + args,
-        colour=discord.Colour(0x76adf1),
+        colour=0x0094FF,
         url=query,
         description=f"Don't worry, it's really easy to do that! **[Click here]({query})** to see how.\n\n_Powered by Google:tm:_"
     )
@@ -36,7 +36,6 @@ async def how(message):
 
     # Posting to channel and adding reaction
     await message.channel.send(content=f"Here is the answer for your question:\n{query}", embed=embed)
-    await message.add_reaction("<:surprisedPikachu:533297579048304660>")
 
 async def forhire(message):
     # remove "not for hire" role if the user has it
