@@ -169,8 +169,10 @@ async def donation(target, amount):
             await target.add_roles(donator, donator_plus)
             message = '\n'.join([message, "`Donator`", "`Donator+`"])
     elif amount >= 3500:
-        if not any("Custom // Gold" in role.name for role in target.roles):
-            await target.add_roles(custom)
+        for role in target.roles:
+            if "Custom //" in role:
+                await role.delete(reason="Only one custom color role per user.")
+        await target.add_roles(custom)
 
         if (donator and donator_plus) in target.roles:
             message = '\n'.join([message, "You have qualified for all the possible roles. We really appreciate you!"])

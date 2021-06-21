@@ -126,20 +126,23 @@ async def on_member_update(before, after):
     try:
         if await functions.is_boosted(after) and not await functions.is_boosted(before):
             custom = after.guild.get_role(data.custom_gold)
-            if not any("Custom // Gold" in role.name for role in after.roles):
-                await after.add_roles(custom)
-                await functions.send_embed(
-                    after,
-                    "ScriptersCF",
-                    """Thank you for boosting the server!
-                    You have also been awarded a custom colour role."""
-                )
+            for role in after.roles:
+                if "Custom //" in role:
+                    await role.delete(reason="Only one custom color role per user.")
+            await after.add_roles(custom)
+            await functions.send_embed(
+                after,
+                "ScriptersCF",
+                """Thank you for boosting the server!
+                You have also been awarded a custom colour role."""
+            )
+                
         elif not await functions.is_boosted(after) and await functions.is_boosted(before):
             plus = after.guild.get_role(data.donator_plus)
             if plus not in after.roles:
                 for role in after.roles:
                     if "Custom //" in role:
-                        await role.delete(reason="Nitro boost expired, insufficient roles")
+                        await role.delete(reason="Nitro boost expired, insufficient roles.")
     except:
         0
 
