@@ -99,6 +99,19 @@ async def handle(message):
         await check_punishments(message.guild)
 
 async def check_donation(message):
+    """
+    Function that checks if user that sent donation is in the server.
+    Loads JSON data and attempts to search for an existing user.
+
+    Parameters:
+        message: JSON data of donation information.
+
+    Results:
+        Fires `donation` function that handles user donations.
+
+    Returns:
+        N/A
+    """
     data = json.loads(message.content.split("\n")[0])
     amount = data["amount"]
 

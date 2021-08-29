@@ -140,13 +140,29 @@ async def set_punish_time(target, punish_type, length, multiply):
     )
 
 async def donation(target, amount):
-    # Give user role based on total donation value, if applicable
+    """ 
+    Function that handles user donations. Assigns a user role based on amount donated if
+    they qualify for one.
+    Creates base message `message` that adjusts based on amount donated. Sends message to user
+    if donation resolves.
+
+    Parameters:
+        target: Represents the user that gave a donation to the server.
+        amount: Represents the amount the user donated to the server.
+
+    Result:
+        Fires send_embed functions, which sends `message` as a direct message to `target` user.
+
+    Returns:
+        N/A
+
+    """
+
     message = """__**Thank you for your donation! We really appreciate your support!**__
     Your awarded roles are below.
     _____________________________
     """
 
-    # Roles
     donator = target.guild.get_role(data.donator)
     donator_plus = target.guild.get_role(data.donator_plus)
     custom = target.guild.get_role(data.custom_gold)
@@ -183,5 +199,4 @@ async def donation(target, amount):
             await target.add_roles(donator, donator_plus)
             message = '\n'.join([message, "`Donator`", "`Donator+`", "`Custom // Gold`"])
 
-    # Send to user
     await send_embed(target, "ScriptersCF", message)
