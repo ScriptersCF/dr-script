@@ -87,6 +87,11 @@ async def is_verified(user):
         if role.name == "Verified":
             return True
 
+async def is_boosted(user):
+    # iterate through user's roles, if user has nitro booster role then return true
+    for role in user.roles:
+        if role.name == "Nitro Booster":
+            return True
 
 async def get_arguments(message):
     # check message arguments, return error if none given
@@ -137,7 +142,6 @@ async def set_punish_time(target, punish_type, length, multiply):
         f"UPDATE punishments SET {punish_type}End = (?) WHERE userId = (?)",
         (str(end_time), str(target.id))
     )
-
 
 async def give_role(message, role_id): # This is different from toggle_role()
     role = message.guild.get_role(role_id)
@@ -191,3 +195,65 @@ async def get_user_embed(user, xp, level_up, new_role):
     embed.add_field(name = "**Points**", value = f"{xp}/{round(next_xp)} XP", inline = True)
     
     return embed
+
+async def donation(target, amount):
+    """ 
+    Function that handles user donations. Assigns a user role based on amount donated if
+    they qualify for one.
+    Creates base message `message` that adjusts based on amount donated. Sends message to user
+    if donation resolves.
+
+    Parameters:
+        target: Represents the user that gave a donation to the server.
+        amount: Represents the amount the user donated to the server.
+
+    Result:
+        Fires send_embed functions, which sends `message` as a direct message to `target` user.
+
+    Returns:
+        N/A
+
+    """
+
+    message = """__**Thank you for your donation! We really appreciate your support!**__
+    Your awarded roles are below.
+    _____________________________
+    """
+
+    donator = target.guild.get_role(data.donator)
+    donator_plus = target.guild.get_role(data.donator_plus)
+    custom = target.guild.get_role(data.custom_gold)
+
+    if amount < 100:
+        message = '\n'.join([message, "You do not qualify for a donation role."])
+    elif amount >= 100 and amount < 1000:
+        if donator in target.roles:
+            message = '\n'.join([message, "You already have the roles you qualify for."])
+        else:
+            await target.add_roles(donator)
+            message = '\n'.join([message, "`Donator`"])
+    elif amount >= 1000 and amount < 3500:
+        if (donator and donator_plus) in target.roles:
+            message = '\n'.join([message, "You already have the roles you qualify for."])
+        elif donator in target.roles and donator_plus not in target.roles:
+            await target.add_roles(donator_plus)
+            message = '\n'.join([message, "`Donator+`"])
+        elif (donator and donator_plus) not in target.roles:
+            await target.add_roles(donator, donator_plus)
+            message = '\n'.join([message, "`Donator`", "`Donator+`"])
+    elif amount >= 3500:
+        for role in target.roles:
+            if "Custom //" in role:
+                await role.delete(reason="Only one custom color role per user.")
+        await target.add_roles(custom)
+
+        if (donator and donator_plus) in target.roles:
+            message = '\n'.join([message, "You have qualified for all the possible roles. We really appreciate you!"])
+        elif donator in target.roles and donator_plus not in target.roles:
+            await target.add_roles(donator_plus)
+            message = '\n'.join([message, "`Donator+`", "`Custom // Gold`"])
+        elif (donator and donator_plus) not in target.roles:
+            await target.add_roles(donator, donator_plus)
+            message = '\n'.join([message, "`Donator`", "`Donator+`", "`Custom // Gold`"])
+
+    await send_embed(target, "ScriptersCF", message)

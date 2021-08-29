@@ -1,4 +1,4 @@
-import math, datetime
+import math, datetime, json
 from Modules import functions, data
 from time import time
 
@@ -127,7 +127,6 @@ async def stats(message):
     response = await functions.get_user_embed(message.author, user_data[1], False, False)
     await message.channel.send(embed = response)
 
-
 async def handle(message):
     global last_check_time
 
@@ -138,3 +137,25 @@ async def handle(message):
     if current_time >= last_check_time + data.check_cooldown:
         last_check_time = current_time
         await check_punishments(message.guild)
+
+async def check_donation(message):
+    """
+    Function that checks if user that sent donation is in the server.
+    Loads JSON data and attempts to search for an existing user.
+
+    Parameters:
+        message: JSON data of donation information.
+
+    Results:
+        Fires `donation` function that handles user donations.
+
+    Returns:
+        N/A
+    """
+    data = json.loads(message.content.split("\n")[0])
+    amount = data["amount"]
+
+    # match sent user with each member in server
+    async for member in message.guild.fetch_members():
+        if member.name + "#" + member.discriminator == data["user"]:
+            await functions.donation(member, amount)
