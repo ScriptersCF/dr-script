@@ -156,7 +156,10 @@ async def get_level_from_points(user_points):
 
 
 async def get_user_embed(user, xp, level_up, new_role):
-    # Returns embed for user level and points
+    """
+        Function to generate an user embed which shows current level on !rank command
+        Can also be called by the bot when a level up event is triggered
+    """
         
     level = await get_level_from_points(xp) # Get level from xp
 
@@ -172,18 +175,17 @@ async def get_user_embed(user, xp, level_up, new_role):
         # Increment description if user got a new xp role.
         description += f"You were awarded the following role: `{new_role}`"
     
-    # Progress bar:
-    emojis = "\n\n" # Escape and skip line
-    for i in range(10):
-        if i < math.floor(percentage_xp * 10):
-            emojis += ":white_large_square: "
-        else:
-            emojis += ":black_large_square: "                
+    # Progress bar:    
+    xp = percentage_xp * 10 # XP is decimal (0.00 - 1.00), to turn it into an integer (0-10), multiply by 10
+    filled = math.ceil(percentage_xp)
+    empty = 10 - math.floor(percentage_xp)
+    
+    emojis = + (":white_large_square: " * empty) + (":black_large_square: " * empty)    
     
     # Create/handle embed
     embed = discord.Embed(
         colour = discord.Colour(0x76adf1),
-        description = description + emojis
+        description = description + ("\n\n") + emojis
     )
     
     user_and_discriminator = f"{user.name}#{user.discriminator}"
