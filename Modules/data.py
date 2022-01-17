@@ -5,60 +5,56 @@ check_cooldown = 25
 version = "Mr. Script 0.21" + bot_type
 rich_presence = "www.scf.cx/bot"
 
-token = ""
+token = "OTMyNDYxNjUwMDg1MjkwMDc0.YeTUlQ.wAppXmba6DCQlzWlVoD-K8tGgXo"
 test_token = ""
 
-regular = 322102125402259456
-gold_role = 639147821273972736
+regular = 932507980493103174
+gold_role = 932508014706049096
 
-muted = 335171382428303360
-aban = 550114698297737216
-shban = 416786636118949918
+muted = 932508026626265132
+aban = 932508027599327332
+shban = 932508027754524712
 
-verified = 346604542550605835
-forhire = 374610760032321537
-notforhire = 374610878940708864
-scripter = 308611398672318475
-learner = 391938933841199104
-gamejam = 350934544628580362
+verified = 932508028345917490
+verifiedlvl2 = 932508934458187786
+forhire = 932508029344182392
+notforhire = 932508029751021608
+scripter = 932508030745059338
+learner = 932508031349035008
+gamejam = 932508031726526484
+
+club10k = 932509049981911120
+club20k = 932509070273945640
+club50k = 932509103484469260
+club100k = 932509122891505715
 
 #donator = 323047035840233474
 #donator_plus = 325937099557830656
 #custom_gold = 639147821273972736
 
-no_server = 676921838181548083
-no_gamejam = 678974586951565312
-no_event = 676921944880185365
+no_server = 932508223691452466
+no_gamejam = 932508224102481931
+no_event = 932508224723247164
 
-general_channel = 306153640023031820
-logs_channel = 332883332528603146
-message_logs = 370937658920271874
+general_channel = 932461442756653120
+logs_channel = 932508689888342027
+message_logs = 932508712889880626
 #donation_channel = 473852097415086090
 
 channel_points = {
-    349255881977757696: 0,
-    639942887152549899: 0,
-    692166689403437090: 0,
-    692166854914867230: 0,
-    692165904947216414: 0,
-    692166816830586920: 0,
-    306156119519264770: 2,
-    462394160629153812: 2,
-    699995169629667370: 2,
-    379023623245004810: 2,
-    306885827189800960: 3,
-    351182527316099072: 3,
-    372506961171841025: 3,
-    639153031619018752: 3
+    general_channel: 3,
+    logs_channel: 0,
+    message_logs: 0,
+    932510713296085043: 3, # points
 }
 
 xp_roles = {
-    352799502379253772: 30, # (+3 days in the server) Verified Lvl. 2  
-    322102125402259456: 2000, # Regular
-    642852174854094868: 10000, #10k+ Club
-    642852176628285455: 20000, #20k+ Club
-    642852191606013963: 50000, #50k+ Club
-    550880780776374296: 100000, # 100k+ Club (Also add 'Custom // Gold' role)
+    verifiedlvl2: 30,
+    regular: 2_000,
+    club10k: 10_000,
+    club20k: 20_000,
+    club50k: 50_000,
+    club100k: 100_000, # Also add 'Custom // Gold' role
 }
 
 color_list = {
@@ -109,8 +105,6 @@ command_aliases = {
     "scripter": "scripter",
     "learner": "learner",
 
-    #"stats": "stats",
-    #"points": "stats",
     #"rank": "stats",
     #"statistics": "stats",
     #"ranking": "stats",
