@@ -17,7 +17,7 @@ command_list = {
     "scripter": {"run": commands.scripter, "requirement": ["Verified"]},
     "learner": {"run": commands.learner, "requirement": ["Verified"]},
 
-    "mute": {"run": punishments.mute, "requirement": ["Moderator", "Trial Moderator"]},
+    "mute": {"run": punishments.mute, "requirement": ["Moderator", "Trial Moderator", "Senior Moderator", "Administrator"]},
     "kick": {"run": punishments.kick, "requirement": ["Moderator"]},
     "ban": {"run": punishments.ban, "requirement": ["Administrator", "Senior Moderator"]},
     "aban": {"run": punishments.aban, "requirement": ["Moderator"]},
@@ -54,9 +54,10 @@ async def generate_invite(member):
 
     # otherwise, generate private invite to #general for user for verification, dm, kick and log
     try:
+        invite_timeout = 600
         general = member.guild.get_channel(data.general_channel)
         invite = await general.create_invite(
-            max_age = 600,
+            max_age = invite_timeout,
             max_uses = 1,
             unique = True,
             reason = f"Private invite for {member.name}."
@@ -66,10 +67,10 @@ async def generate_invite(member):
 
         try:
             await member.kick(reason = f"Private invite code '{invite.code}' has been sent.")
-            private_invites[member.id] = {"invite": invite, "timeout": time.time() + 600}
+            private_invites[member.id] = {"invite": invite, "timeout": time.time() + invite_timeout}
 
             # wait 10 minutes and reset dictionary if still found
-            await asyncio.wait(600)
+            await asyncio.sleep(invite_timeout)
             if member.id in private_invites:
                 del private_invites[member.id]
         except discord.errors.Forbidden:
@@ -102,8 +103,8 @@ async def on_message(message):
             await message.add_reaction("❌")
     
     # check if message is a donation
-    if message.channel.id == data.donation_channel:
-        await messages.check_donation(message)
+    # if message.channel.id == data.donation_channel:
+    #     await messages.check_donation(message)
 
     # check message for spam, award points and such
     await messages.handle(message)

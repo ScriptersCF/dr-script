@@ -16,11 +16,17 @@ aban = 550114698297737216
 shban = 416786636118949918
 
 verified = 346604542550605835
+verifiedlvl2 = 352799502379253772
 forhire = 374610760032321537
 notforhire = 374610878940708864
 scripter = 308611398672318475
 learner = 391938933841199104
 gamejam = 350934544628580362
+
+club10k = 642852174854094868
+club20k = 642852176628285455
+club50k = 642852191606013963
+club100k = 550880780776374296
 
 #donator = 323047035840233474
 #donator_plus = 325937099557830656
@@ -34,6 +40,8 @@ general_channel = 306153640023031820
 logs_channel = 332883332528603146
 message_logs = 370937658920271874
 #donation_channel = 473852097415086090
+
+#306156119519264770
 
 channel_points = {
     349255881977757696: 0,
@@ -53,12 +61,12 @@ channel_points = {
 }
 
 xp_roles = {
-    352799502379253772: 30, # (+3 days in the server) Verified Lvl. 2  
-    322102125402259456: 2000, # Regular
-    642852174854094868: 10000, #10k+ Club
-    642852176628285455: 20000, #20k+ Club
-    642852191606013963: 50000, #50k+ Club
-    550880780776374296: 100000, # 100k+ Club (Also add 'Custom // Gold' role)
+    verifiedlvl2: 30,
+    regular: 2_000,
+    club10k: 10_000,
+    club20k: 20_000,
+    club50k: 50_000,
+    club100k: 100_000, # Also add 'Custom // Gold' role
 }
 
 color_list = {
@@ -109,8 +117,6 @@ command_aliases = {
     "scripter": "scripter",
     "learner": "learner",
 
-    #"stats": "stats",
-    #"points": "stats",
     #"rank": "stats",
     #"statistics": "stats",
     #"ranking": "stats",

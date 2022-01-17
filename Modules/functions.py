@@ -10,7 +10,8 @@ async def send_embed(channel, title, description):
         )
         #embed.set_footer(text = data.version + " for ScriptersCF | !help")
         return await channel.send(embed = embed)
-    except:
+    except Exception as error:
+        print(f"Failed to send embed: {error}")
         return False
 
 
@@ -84,7 +85,7 @@ async def is_staff(user):
 async def is_verified(user):
     # iterate through user's roles, if user has verified role then return true
     for role in user.roles:
-        if role.name == "Verified":
+        if role.id == data.verified:
             return True
 
 async def is_boosted(user):
@@ -175,12 +176,11 @@ async def get_user_embed(user, xp, level_up, new_role):
         # Increment description if user got a new xp role.
         description += f"You were awarded the following role: `{new_role}`"
     
-    # Progress bar:    
-    xp = percentage_xp * 10 # XP is decimal (0.00 - 1.00), to turn it into an integer (0-10), multiply by 10
-    filled = math.ceil(percentage_xp)
-    empty = 10 - math.floor(percentage_xp)
+    total_squares = 10
+    filled_squares = int(total_squares * percentage_xp)
+    empty_squares = total_squares - filled_squares
     
-    emojis = + (":white_large_square: " * empty) + (":black_large_square: " * empty)    
+    emojis = (":white_large_square: " * filled_squares) + (":black_large_square: " * empty_squares)    
     
     # Create/handle embed
     embed = discord.Embed(
@@ -194,7 +194,7 @@ async def get_user_embed(user, xp, level_up, new_role):
     embed.set_author(name = user_and_discriminator, icon_url = user_avatar)
     embed.set_thumbnail(url = user_avatar)
     embed.add_field(name = "**Level**", value = level, inline = True)
-    embed.add_field(name = "**Points**", value = f"{xp}/{round(next_xp)} XP", inline = True)
+    embed.add_field(name = "**Points**", value = f"{round(xp)}/{round(next_xp)} XP", inline = True)
     
     return embed
 

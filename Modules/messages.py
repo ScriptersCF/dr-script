@@ -51,22 +51,22 @@ async def give_role(message, role_id):
 
 
 async def process_auto_roles(message, new_points):
-    if new_points < data.xp_roles[352799502379253772]: # No point in processing this if xp < 30
+    if new_points < data.xp_roles[data.verifiedlvl2]: # No point in processing this if xp < 30
         return None
     
     #  Give highest role that satisfies: user xp >= xp_role
     role_id = list(filter(lambda x: (new_points >= data.xp_roles[x]), data.xp_roles))[-1] 
 
     # Handle special cases:
-    if role_id == 352799502379253772: # Verified Lvl. 2
+    if role_id == data.verifiedlvl2: # Verified Lvl. 2
         joined_at = message.author.joined_at
         time_now = datetime.datetime.now()      
 
         if not time_now - joined_at >= datetime.timedelta(days = 3): # Award only if joined more than 3 days ago.
             return None
         
-    elif role_id == 550880780776374296: # 100k+ Points
-        await give_role(message, 639147821273972736) # Additionally give custom Gold role
+    elif role_id == data.club100k: # 100k+ Points
+        await give_role(message, data.gold_role) # Additionally give custom Gold role
         
     elif not role_id:
         return None
