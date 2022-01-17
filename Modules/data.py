@@ -5,7 +5,7 @@ check_cooldown = 25
 version = "Mr. Script 0.21" + bot_type
 rich_presence = "www.scf.cx/bot"
 
-token = "OTMyNDYxNjUwMDg1MjkwMDc0.YeTUlQ.wAppXmba6DCQlzWlVoD-K8tGgXo"
+token = ""
 test_token = ""
 
 regular = 932507980493103174
