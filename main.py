@@ -102,8 +102,8 @@ async def on_message(message):
             await message.add_reaction("❌")
     
     # check if message is a donation
-    if message.channel.id == data.donation_channel:
-        await messages.check_donation(message)
+    # if message.channel.id == data.donation_channel:
+    #     await messages.check_donation(message)
 
     # check message for spam, award points and such
     await messages.handle(message)

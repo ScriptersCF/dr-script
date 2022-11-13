@@ -176,11 +176,10 @@ async def get_user_embed(user, xp, level_up, new_role):
         description += f"You were awarded the following role: `{new_role}`"
     
     # Progress bar:    
-    xp = percentage_xp * 10 # XP is decimal (0.00 - 1.00), to turn it into an integer (0-10), multiply by 10
-    filled = math.ceil(percentage_xp)
-    empty = 10 - math.floor(percentage_xp)
+    filled = math.ceil(percentage_xp * 10)
+    empty = 10 - math.floor(percentage_xp * 10)
     
-    emojis = + (":white_large_square: " * empty) + (":black_large_square: " * empty)    
+    emojis = (":white_large_square: " * filled) + (":black_large_square: " * empty)    
     
     # Create/handle embed
     embed = discord.Embed(
