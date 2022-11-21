@@ -16,11 +16,13 @@ aban = 550114698297737216
 shban = 416786636118949918
 
 verified = 346604542550605835
+verifiedlvl2 = 352799502379253772
 forhire = 374610760032321537
 notforhire = 374610878940708864
 scripter = 308611398672318475
 learner = 391938933841199104
 gamejam = 350934544628580362
+club100k = 550880780776374296
 
 #donator = 323047035840233474
 #donator_plus = 325937099557830656
@@ -53,12 +55,12 @@ channel_points = {
 }
 
 xp_roles = {
-    352799502379253772: 30, # (+3 days in the server) Verified Lvl. 2  
+    verifiedlvl2: 30, # (+3 days in the server) Verified Lvl. 2  
     322102125402259456: 2000, # Regular
     642852174854094868: 10000, #10k+ Club
     642852176628285455: 20000, #20k+ Club
     642852191606013963: 50000, #50k+ Club
-    550880780776374296: 100000, # 100k+ Club (Also add 'Custom // Gold' role)
+    club100k: 100000, # 100k+ Club (Also add 'Custom // Gold' role)
 }
 
 color_list = {
