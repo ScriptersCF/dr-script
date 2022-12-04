@@ -1,5 +1,6 @@
-# Contribution Guidelines
+# :warning: These guidelines are outdated, please come back later.
 
+______
 Thank you in advance to those that choose to help us with our bot. Users that send in accepted pull requests will be rewarded with the `Open Source Dev` role in our [Discord server](https://discord.gg/N9GRpSC) if interested.
 
 ________
