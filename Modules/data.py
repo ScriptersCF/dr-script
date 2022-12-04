@@ -1,42 +1,29 @@
-prefix = "!"
-bot_type = "R"
-check_cooldown = 25
+### CONFIG - Feel free to change these values when testing the bot.
 
-version = "Mr. Script 0.21" + bot_type
-rich_presence = "www.scf.cx/bot"
+### REQUIRED, used to get guild object in on_ready
+server_id = 306153640023031820
 
-token = ""
-test_token = ""
+### IMPORTANT, it is recommended to set to False if testing
+# setting to False prevents points and ranks from being updated
+award_points = True
 
-regular = 322102125402259456
-gold_role = 639147821273972736
+# optional, you can leave this as is
+version = "Dr. Script 1.0"
+rich_presence = "scf.cx/bot"
+prefix = "-" # general commands should use slash commands instead
 
-muted = 335171382428303360
-aban = 550114698297737216
-shban = 416786636118949918
+# channel ids used in the server
+# if you aren't testing this, you can leave this as is
+messages_channel = 1046253977785864284
+general = 306153640023031820
+mod_logs = 332883332528603146
 
-verified = 346604542550605835
-verifiedlvl2 = 352799502379253772
-forhire = 374610760032321537
-notforhire = 374610878940708864
-scripter = 308611398672318475
-learner = 391938933841199104
-gamejam = 350934544628580362
-club100k = 550880780776374296
+# channel that new joins and donations are sent to
+# if you aren't testing this, you can leave this as is
+joins_and_donations = 473852097415086090
 
-#donator = 323047035840233474
-#donator_plus = 325937099557830656
-#custom_gold = 639147821273972736
-
-no_server = 676921838181548083
-no_gamejam = 678974586951565312
-no_event = 676921944880185365
-
-general_channel = 306153640023031820
-logs_channel = 332883332528603146
-message_logs = 370937658920271874
-#donation_channel = 473852097415086090
-
+# ids of channels with specific points earned per message (or defaults to 1)
+# if you aren't testing this, you can leave this as is
 channel_points = {
     349255881977757696: 0,
     639942887152549899: 0,
@@ -54,138 +41,142 @@ channel_points = {
     639153031619018752: 3
 }
 
-xp_roles = {
-    verifiedlvl2: 30, # (+3 days in the server) Verified Lvl. 2  
-    322102125402259456: 2000, # Regular
-    642852174854094868: 10000, #10k+ Club
-    642852176628285455: 20000, #20k+ Club
-    642852191606013963: 50000, #50k+ Club
-    club100k: 100000, # 100k+ Club (Also add 'Custom // Gold' role)
+# ids of roles in the server
+# if you aren't testing this, you can leave this as is
+verified = 346604542550605835
+verified2 = 352799502379253772
+
+regular = 322102125402259456
+regular2 = 642852174854094868
+regular3 = 642852176628285455
+regular4 = 642852191606013963
+regular5 = 550880780776374296
+
+donator = 323047035840233474
+donator_plus = 325937099557830656
+
+patron = 332203969331986432
+patron_plus = 642852166943637514
+patron_plus_plus = 332217316693770260
+
+nitro_booster = 585533734548406305
+double_xp = 1044338857988075581
+red_colour = 359352595233374208
+
+staff_role = 1044304663073280061
+shban_role = 416786636118949918
+aban_role = 550114698297737216
+
+patron_roles = [patron, patron_plus, patron_plus_plus]
+donator_roles = [donator, donator_plus, double_xp]
+
+# gets filled with actual discord.Role values at startup
+# if you aren't testing this, you can leave this as is
+# otherwise, you should add any new role ids to this list
+roles = {
+    verified: None,
+    verified2: None,
+    regular: None,
+    regular2: None,
+    regular3: None,
+    regular4: None,
+    regular5: None,
+    donator: None,
+    donator_plus: None,
+    patron: None,
+    patron_plus: None,
+    patron_plus_plus: None,
+    nitro_booster: None,
+    double_xp: None,
+    red_colour: None,
+    staff_role: None,
+    shban_role: None,
+    aban_role: None
 }
 
-color_list = {
-    "Maroon",
-    "Red",
-    "Coral",
-    "Brown",
-    "Orange",
-    "Wheat",
-    "Gold",
-    "Yellow",
-    "Green",
-    "Lime",
-    "Cyan",
-    "Blue",
-    "Navy Blue",
-    "Blurple",
-    "Fuchsia",
-    "Hot Pink",
-    "Purple",
-    "Plum",
-    "Black",
-    "Grey",
-    "White"
+# xp points needed to reach each role
+# if you aren't testing this, you can leave this as is
+points_needed = {
+    2000: regular,
+    10000: regular2,
+    20000: regular3,
+    50000: regular4,
+    100000: regular5
 }
 
-command_aliases = {
-    "help": "help",
-    "cmds": "help",
-    "commands": "help",
-    "info": "help",
+# list of donation amounts and their corresponding rewards
+# if you aren't testing this, you can leave this as is
+donation_awards = {
+    100: {"add": [donator], "remove": [],
+        "awards": ["Donator Role"]},
 
-    "how": "how",
+    1000: {"add": [donator_plus], "remove": [donator],
+        "awards": ["Donator+ Role"]},
 
-    #"changecolour": "changecolour",
-    #"changecolor": "changecolour",
-    #"colorlist": "colourlist",
-    #"colourlist": "colourlist",
+    5000: {"add": [donator_plus], "remove": [donator],
+        "awards": ["Donator+ Role", "Custom Colour Access"]},
 
-    "toggle": "toggle",
-
-    "forhire": "forhire",
-    "for_hire": "forhire",
-    
-    "notforhire": "notforhire",
-    "not_for_hire": "norforhire",
-    
-    "scripter": "scripter",
-    "learner": "learner",
-
-    #"stats": "stats",
-    #"points": "stats",
-    #"rank": "stats",
-    #"statistics": "stats",
-    #"ranking": "stats",
-
-    "kick": "kick",
-    "mute": "mute",
-    "ban": "ban",
-    "aban": "aban",
-    "shban": "shban",
-    "unmute": "unmute",
-    "lock": "lock",
-    "unlock": "unlock",
-    "clear": "clear",
-    "report": "report",
-    "derole": "derole",
-    "addpoints": "addpoints",
-
-    "stats": "stats",
-    "points": "stats",
-    "level": "stats"
+    10000: {"add": [donator_plus, double_xp], "remove": [donator],
+        "awards": ["Donator+ Role", "Custom Colour Access", "2x Chat XP"]}
 }
 
-punishment_names = {
-    1: "mute",
-    2: "aBan",
-    3: "shBan"
+# list of available custom colour names
+# if you aren't testing this, you can leave this as is
+colour_list = {
+    "Maroon", "Red", "Fire", "Coral", "Orange",
+    "Brown", "Gold", "Yellow", "Seafoam", "Lime",
+    "Green", "Teal", "Cyan", "Sky", "Blue",
+    "Navy", "Purple", "Pink", "Hot Pink", "White"
 }
 
-punishment_roles = {
-    "mute": muted,
-    "aBan": aban,
-    "shBan": shban
-}
+### END OF CONFIG
+# variables below this line are extraneous strings used in the bot
 
-welcome_message = """Welcome to ScriptersCF, one of the leading scripting servers on Discord with over 7,000 members!
+donation_message = """**Thank you very much** for your donation! :partying_face:
+
+**You currently have access to the following perks:**
+{0}
+
+*If there are any issues, please contact a member of staff.*"""
+
+welcome_message = """👋 Welcome to ScriptersCF, one of the leading scripting servers on Discord with over 7,500 members!
+<:YouTube:735534954145906688> If you're looking to get into scripting, check out our [scripting tutorials](https://www.youtube.com/playlist?list=PLug2rYd8OSsV1fUEPM1C-PBg64jkZS5J0).
 
 By joining our server, you represent that you have read and agreed to our [rules](https://github.com/ScriptersCF/server-rules/blob/master/README.md).
 
-Additionally, you are giving us explicit permission to store information including messages, message count, moderation history and anything else that we deem appropriate.
-
-This allows us to moderate effectively or implement certain bot functions, contains no personally identifable information and will not be shared with or sold to any external parties.
-
 *Note: The invite link below will expire in 10 minutes.*"""
 
-join_message = """**[Click here](https://discord.com/invite/{0}) to rejoin the server.**"""
+patron_removal_message = """Unfortunately, your Patreon perks have expired, but thank you for helping to support us for the duration of your subscription! :heart:
 
-help_message = """`!help` - Displays general help for the Mr. Script bot.
-`g:help` - Displays help for the Gamer bot used in <#715562907294761040>.
+Your perks have been updated based on previous donations. If there are any issues, be sure to contact a member of staff so we can help.
 
-**Commands**
-`!stats @user OR <num>` - Displays the user's stats.
-`!leaderboard` - Displays the top 10 most active server members.
-`!report @user <reason>` - Reports a user for breaking our rules.
-`!roll 5d3` - Rolls 5 3-sided dice.
-`!rolldie` - Rolls a standard 6-sided die.
+If you would like to continue supporting us in the future, you can do so [via our Patreon page here](https://www.patreon.com/scripterscf)."""
 
-**Roles**
-`!forhire` - Gives you the `For Hire` role.
-`!notforhire` - Gives you the `Not For Hire` role.
-`!scripter` - Gives you the `Scripter` role.
-`!learner` - Gives you the `Learner` role.
+nitro_removal_message = """Unfortunately, your Nitro Booster perks have expired, but thank you for helping to support us for the duration of your subscription! :heart:
 
-**Scripting**
-🎮 Look through our [open-source games](https://discordapp.com/channels/306153640023031820/543874721603911690).
-<:Lua:735536158741757969> Read the [Lua PIL guide](https://cdn.discordapp.com/attachments/306156119519264770/575829412235313172/Programming_in_Lua_5.1.pdf).
-<:Studio:735548957639311380> Take a look at the [Roblox Wiki](https://developer.roblox.com).
-<:YouTube:735534954145906688> Check out our [YouTube tutorials](https://youtube.com/scripterscf). *(Coming Soon)*
+Your perks have been updated based on previous donations. If there are any issues, be sure to contact a member of staff so we can help.
 
-**Miscellaneous**
-<:Script:735535206995460198> View our [rules](https://discordapp.com/channels/306153640023031820/306155109203836928).
-<:Roblox:735535578191364197> Support us on [Roblox](https://www.roblox.com/games/960878638/Donate).
-<:Patreon:735535762178703390> Support us on [Patreon](https://patreon.com/ScriptersCF).
-<:Twitter:735526455806656595> Follow [@ScriptersCF](https://twitter.com/ScriptersCF) on Twitter.
+If you would like to continue supporting us in the future, feel free to boost our server again!"""
+
+welcome_title = "Welcome to ScriptersCF :wave:"
+welcome_message = """**Here's what you're about to have access to...**
+:question: *Use our **scripting help** forum for free, 24/7*
+:handshake: *Trade your services in our **selling & hiring** channels*
+:video_game: *Join us for **game jam** events with huge prizes*
+
+**New to scripting?** We recommend the following resources:
+<:YouTube:735534954145906688> Our go-to series: [youtube.com/jotslo](https://youtube.com/jotslo)
+:notebook_with_decorative_cover: Roblox Engine API: [create.roblox.com/docs](https://create.roblox.com/docs/reference/engine)
+<:Studio:735548957639311380> Developer Forum: [devforum.roblox.com](https://devforum.roblox.com)
+
+**How do I join?**
+Simply head over to <#886612569601769512>, select your roles & verify :white_check_mark:
 """
 
-hammers = ["🔨","🛠️","⚒️","⛏️","⚔️","⛏","🛠","⚒"]
+joined_message = "Welcome to the community, <@{0}>! :wave:"
+
+rankup_message = "Congratulations, <@{0}>! You have reached level **{1}**!"
+roleup_message = "Congratulations, <@{0}>! You have received **{1}**!"
+
+default_avatar = "https://cdn.discordapp.com/embed/avatars/0.png"
+points_icon = "https://joshl.io/img/points.png"

@@ -1,200 +1,175 @@
-import discord, asyncio, aiohttp, sqlite3, json, requests, csv, time, datetime
-from discord import Webhook, RequestsWebhookAdapter
+import discord
+from discord import app_commands
+from modules import *
+from math import ceil
+from typing import Optional
 
+SERVER = discord.Object(id=data.server_id)
+
+class MyClient(discord.Client):
+    # when initialised, set intents & generate app commands
+    def __init__(self, *, intents: discord.Intents):
+        super().__init__(intents=intents)
+        self.tree = app_commands.CommandTree(self)
+    
+    # when the bot is ready, make cmds available in the server
+    async def setup_hook(self):
+        self.tree.copy_global_to(guild=SERVER)
+        await self.tree.sync(guild=SERVER)
+
+
+# declare intents, enabling members & messages
 intents = discord.Intents.default()
 intents.members = True
-client = discord.Client(intents=intents)
+intents.messages = True
+intents.message_content = True
 
-from Modules import commands, data, functions, messages, punishments
-private_invites = {}
+# start client
+client = MyClient(intents=intents)
 
-command_list = {
-    "help": {"run": commands.help, "requirement": ["Verified"]},
+# define points command, and listen for its usage
+@client.tree.command()
+@app_commands.describe(user="The user to get points for")
+async def points(interaction: discord.Interaction, user: Optional[discord.Member] = None):
+    # get user data for reference (specified user or author)
+    user = user or interaction.user
+    user_id, points, _, _ = functions.get_data(user.id)
 
-    "toggle": {"run": commands.toggle, "requirement": ["Verified"]},
-    "forhire": {"run": commands.forhire, "requirement": ["Verified"]},
-    "notforhire": {"run": commands.notforhire, "requirement": ["Verified"]},
-    "scripter": {"run": commands.scripter, "requirement": ["Verified"]},
-    "learner": {"run": commands.learner, "requirement": ["Verified"]},
+    # get level and points needed for next level
+    level = 1 + int(0.3 * (int(points) ** 0.5))
+    needed_points = ceil(((level)/0.3)**2)
 
-    "mute": {"run": punishments.mute, "requirement": ["Moderator", "Trial Moderator"]},
-    "kick": {"run": punishments.kick, "requirement": ["Moderator"]},
-    "ban": {"run": punishments.ban, "requirement": ["Administrator", "Senior Moderator"]},
-    "aban": {"run": punishments.aban, "requirement": ["Moderator"]},
-    "shban": {"run": punishments.shban, "requirement": ["Moderator"]},
-    "unmute": {"run": punishments.unmute, "requirement": ["Moderator"]},
-    "clear": {"run": messages.clear, "requirement": ["Moderator"]},
-    "report": {"run": punishments.report, "requirement": ["Verified"]},
-    "derole": {"run": commands.derole, "requirement": ["Administrator"]},
-    "addpoints": {"run": commands.addpoints, "requirement": ["Administrator", "Senior Moderator", "Moderator"]},
+    # create embed & put username into proper format
+    response = discord.Embed(colour=0x0094FF)
+    username = f"{user.name}#{user.discriminator}"
 
-    "stats": {"run": messages.stats, "requirement": ["Verified"]},
-    "how": {"run": commands.how, "requirement": ["Verified"]}
-}
+    # add extra fields to embed
+    icon = user.avatar.url if user.avatar else data.default_avatar
+    response.set_author(name=username, icon_url=icon)
+    response.set_thumbnail(url=data.points_icon)
+    response.add_field(name="Level", value=f"**{level}**", inline=True)
+    response.add_field(name="Points", value=f"**{points}**/{needed_points}", inline=True)
 
-
-async def interpret_command(message):
-    # check if command exists & get proper command name
-    inputted_command = message.content.lower().split()[0]
-
-    for name in data.command_aliases:
-        if name == inputted_command[len(data.prefix):]:
-            command = data.command_aliases[name]
-            command_data = command_list[command]
-
-            # iterate through user's roles and check if role requirement met
-            for role in message.author.roles:
-                if role.name in command_data["requirement"]:
-                    await command_data["run"](message)
-                    return True
-
-
-async def generate_invite(member):
-    global private_invites
-
-    # otherwise, generate private invite to #general for user for verification, dm, kick and log
-    try:
-        general = member.guild.get_channel(data.general_channel)
-        invite = await general.create_invite(
-            max_age = 600,
-            max_uses = 1,
-            unique = True,
-            reason = f"Private invite for {member.name}."
-        )
-        await functions.send_embed(member, "Welcome!", data.welcome_message)
-        await functions.send_embed(member, "", data.join_message.format(invite.code))
-
-        try:
-            await member.kick(reason = f"Private invite code '{invite.code}' has been sent.")
-            private_invites[member.id] = {"invite": invite, "timeout": time.time() + 600}
-
-            # wait 10 minutes and reset dictionary if still found
-            await asyncio.wait(600)
-            if member.id in private_invites:
-                del private_invites[member.id]
-        except discord.errors.Forbidden:
-            print('User could not be kicked (Permission denied)')
-
-    # in case of error, kick user regardless to protect server
-    except Exception as error:
-        await member.kick(reason = f"Kicked due to error: {error}")
+    # respond with embed message 
+    await interaction.response.send_message(embed=response)
 
 
 @client.event
 async def on_message(message):
-    # if not in server or user is bot, ignore
-    if message.author.bot or not message.guild:
-        return
-
-    # if user is not verified, start verif process
-    if message.content and not await functions.is_verified(message.author):
-        await generate_invite(message.author)
-        await message.delete()
-        return
-
-    # setup user data if it doesn't already exist
-    await functions.setup_data(message.author)
-
-    # interpret command if starts with prefix
-    if message.content.startswith(data.prefix):
-        command_exists = await interpret_command(message)
-        if not command_exists:
-            await message.add_reaction("❌")
+    # if message is a potential donation, handle it
+    if message.channel.id == data.joins_and_donations:
+        await donations.handle_message(message)
     
-    # check if message is a donation
-    # if message.channel.id == data.donation_channel:
-    #     await messages.check_donation(message)
+    # if message is a moderation command, handle it
+    if message.content.startswith(data.prefix):
+        await moderation.handle_command(message)
+    
+    # if awarding points is enabled & not from bot, award points
+    if data.award_points and not message.author.bot:
+        await messages.award_points(message)
 
-    # check message for spam, award points and such
-    await messages.handle(message)
+
+@client.event
+async def on_message_edit(before, after):
+    # if log channel doesn't exist, ignore
+    if not data.messages_channel:
+        return
+
+    # if message content is the same, ignore
+    if before.content == after.content:
+        return
+    
+    # otherwise, get user data and create embed
+    user = after.author
+    response = discord.Embed(colour=0xFFA500)
+    username = f"{user.name}#{user.discriminator}"
+
+    # add extra fields to embed
+    icon = user.avatar.url if user.avatar else data.default_avatar
+    response.set_author(name=username, icon_url=icon)
+    response.add_field(name="Channel", value=f"<#{before.channel.id}>", inline=False)
+    response.add_field(name="Original Message", value=before.content, inline=False)
+    response.add_field(name="Edited Message", value=after.content, inline=False)
+
+    # send edited message in message log channel
+    await data.messages_channel.send(embed=response)
+
+
+@client.event
+async def on_message_delete(message):
+    # if log channel doesn't exist, ignore
+    if not data.messages_channel:
+        return
+
+    # get user data and create embed
+    user = message.author
+    response = discord.Embed(colour=0xFF0000)
+    username = f"{user.name}#{user.discriminator}"
+
+    # add extra fields to embed
+    icon = user.avatar.url if user.avatar else data.default_avatar
+    response.set_author(name=username, icon_url=icon)
+    response.add_field(name="Channel", value=f"<#{message.channel.id}>", inline=False)
+    response.add_field(name="Deleted Message", value=message.content, inline=False)
+
+    # send deleted message in message log channel
+    await data.messages_channel.send(embed=response)
 
 
 @client.event
 async def on_member_update(before, after):
-    # check if user is staff member, toggle hammer accordingly
-    try:
-        if await functions.is_staff(after):
-            if "🔨" not in after.nick:
-                await after.edit(nick = after.nick + " 🔨")
-        else:
-            for hammer in data.hammers:
-                if hammer in after.nick:
-                    await after.edit(
-                        nick = after.nick.replace(hammer, "")
-                            or "Unnamed"
-                    )
-    except:
-        0
+    # if roles haven't been changed, ignore
+    if before.roles == after.roles:
+        return
+    
+    # get lists of changed roles
+    added_roles = list(set(after.roles) - set(before.roles))
+    removed_roles = list(set(before.roles) - set(after.roles))
 
-    # check if user is boosting server, give role if so
-    try:
-        if await functions.is_boosted(after) and not await functions.is_boosted(before):
-            custom = after.guild.get_role(data.custom_gold)
-            for role in after.roles:
-                if "Custom //" in role:
-                    await role.delete(reason="Only one custom color role per user.")
-            await after.add_roles(custom)
-            await functions.send_embed(
-                after,
-                "ScriptersCF",
-                """Thank you for boosting the server!
-                You have also been awarded a custom colour role."""
-            )
-                
-        elif not await functions.is_boosted(after) and await functions.is_boosted(before):
-            plus = after.guild.get_role(data.donator_plus)
-            if plus not in after.roles:
-                for role in after.roles:
-                    if "Custom //" in role:
-                        await role.delete(reason="Nitro boost expired, insufficient roles.")
-    except:
-        0
+    # if roles have been added...
+    if added_roles:
+        # if verified role was added, send welcome message
+        if data.roles[data.verified] in added_roles and data.general:
+            await data.general.send(data.joined_message.format(after.id))
+
+        # otherwise, check if relevant donation role was added
+        else:
+            await donations.handle_added_role(after, added_roles)
+    
+    # if roles have been removed, check if relevant donation role was removed
+    if removed_roles:
+        await donations.handle_removed_role(after, removed_roles)
+
 
 @client.event
 async def on_member_join(member):
-    global private_invites
-
-    # check if user has verified via dm, let in & setup data if legitimate, else kick
-    if member.id in private_invites:
-        invites = await member.guild.invites()
-        if private_invites[member.id]["invite"] not in invites:
-            del private_invites[member.id]
-            role = member.guild.get_role(data.verified)
-            await member.add_roles(role)
-            await functions.setup_data(member)
-        else:
-            await member.kick(reason = "User didn't join with private invite.")
-        return
-
-    await generate_invite(member)
+    # when a member joins, create embed
+    welcome_dm = discord.Embed(title=data.welcome_title,
+        description=data.welcome_message,
+        colour=0x0094FF)
+    
+    # send embed to member
+    await member.send(embed=welcome_dm)
 
 
 @client.event
 async def on_ready():
+    # when the bot is ready, assign guild variable
+    # and populate channel variables based on id
+    guild = client.get_guild(data.server_id)
+    data.messages_channel = guild.get_channel(data.messages_channel)
+    data.general = guild.get_channel(data.general)
+    data.mod_logs = guild.get_channel(data.mod_logs)
+
+    # populate roles dictionary with role objects
+    for role_id in data.roles:
+        role = guild.get_role(role_id)
+        data.roles[role_id] = role
+    
+    # set bot status
     await client.change_presence(activity = discord.Game(name = data.rich_presence))
 
-@client.event
-async def on_message_delete(message):
-    log = "**User:** %s (%s)\n" % (message.author.mention, message.author.id)
-    log += "**Channel:** %s (%s)\n" % (message.channel.mention, message.channel.id)
-    log += "**Time:** %s\n" % (datetime.datetime.utcnow().strftime('%d %b %Y, %H:%M UTC'))
-    log += "**Message:** %s\n" % (message.content)
-    await functions.send_embed(client.get_channel(data.message_logs), "Message Deleted", log)
 
-@client.event
-async def on_message_edit(pre_message, post_message):
-    if pre_message.content != post_message.content:
-        log = "**User:** %s (%s)\n" % (pre_message.author.mention, pre_message.author.id)
-        log += "**Channel:** %s (%s)\n" % (pre_message.channel.mention, pre_message.channel.id)
-        log += "**Time:** %s\n" % (datetime.datetime.utcnow().strftime('%d %b %Y, %H:%M UTC'))
-        log += "**Pre-edit Message:** %s\n" % (pre_message.content)
-        log += "**Post-edit Message:** %s\n" % (post_message.content)
-
-        await functions.send_embed(client.get_channel(data.message_logs), "Message Edited", log)
-
-
-# determine which bot token to use & start bot
-if data.bot_type == "T": # beta
-    client.run(data.test_token)
-elif data.bot_type == "R": # release
-    client.run(data.token)
+# start bot with bot's token
+# use your own bot token by modifying token.py
+client.run(token.value)
