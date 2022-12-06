@@ -18,8 +18,6 @@
     ·
     <a href="https://discord.gg/N9GRpSC">Join Our Community</a>
   </p>
-  
-   <img src="assets/bc.gif" alt="Logo" width="464" height="306">
 </div>
 
 
