@@ -53,6 +53,64 @@ async def points(interaction: discord.Interaction, user: Optional[discord.Member
     # respond with embed message 
     await interaction.response.send_message(embed=response)
 
+@client.tree.command()
+@app_commands.describe(page="Which page of the leaderboard to display")
+async def leaderboard(interaction: discord.Interaction, page: Optional[int] = 1):
+    page_size = 10
+    count_users = functions.handle_data("SELECT COUNT(*) FROM scores", ())
+    count_users = count_users[0]
+    from math import ceil
+    max_page = ceil(count_users / page_size)
+
+    if not (page in range(1, max_page + 1)):
+        await interaction.response.send_message(
+            ephemeral=True,
+            content=f":warning: Invalid page, choose a page between 1 and {max_page}")
+        return
+
+    # get top users with between the range (?), (?)
+    top_n = functions.handle_data(
+        f"""SELECT * FROM scores
+        ORDER BY points DESC
+        LIMIT (?), (?);""",
+        (page_size*(page-1), page_size))
+    # to get the rank of a specific user, count the number of users with more points 
+    user_row_rank = functions.handle_data("""SELECT user1.*,
+	(
+        SELECT count(*) 
+        FROM scores AS user2
+        WHERE user2.points >= user1.points
+	) AS rank
+    FROM scores AS user1
+    WHERE user1.userId = (?)""", (interaction.user.id,))
+    # user_row_rank is the row with the userId, points etc but rank is added to the end
+    rank = user_row_rank[-1]
+
+    response = discord.Embed(colour=0x0094FF, title=f"Leaderboard {page}/{max_page}")
+    places = ""
+    users = ""
+    points = ""
+    place = page_size*(page-1) + 1
+    for user in top_n:
+        if place == 1:
+            places += ":first_place:\n"
+        elif place == 2:
+            places += ":second_place:\n"
+        elif place == 3:
+            places += ":third_place:\n"
+        else:
+            places += f"{place}\n"
+        userinfo = await client.fetch_user(user[0])
+        users += f"**{userinfo.name}**#{userinfo.discriminator}\n"
+        points += f"{user[1]}\n"
+        place += 1
+    response.add_field(name="Rank", value=places, inline=True)
+    response.add_field(name="User", value=users, inline=True)
+    response.add_field(name="Points", value=points, inline=True)
+    response.set_footer(text=f"You are rank {rank}/{count_users}")
+
+    # respond with embed message 
+    await interaction.response.send_message(embed=response)
 
 @client.event
 async def on_message(message):
