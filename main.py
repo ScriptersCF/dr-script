@@ -57,10 +57,10 @@ async def points(interaction: discord.Interaction, user: Optional[discord.Member
 @client.tree.command()
 @app_commands.describe(reset="Whether the leaderboard should be reset or not")
 async def helpstats(interaction: discord.Interaction, reset: Optional[bool] = False):
-    # get users and help messages counts if greater than zero
+    # get users data if message count greater than zero
     help_data = functions.handle_data("SELECT userId, helpMsgs FROM scores WHERE helpMsgs > 0 ORDER BY helpMsgs DESC", ())
     
-    # if help data is a single tuple, convert to list
+    # if data is a tuple, convert to list
     if type(help_data) is tuple:
         help_data = [help_data]
 
