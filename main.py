@@ -53,6 +53,35 @@ async def points(interaction: discord.Interaction, user: Optional[discord.Member
     # respond with embed message 
     await interaction.response.send_message(embed=response)
 
+# define help messages reset command, and listen for its usage
+@client.tree.command()
+@app_commands.describe(reset="Whether the leaderboard should be reset or not")
+async def helpstats(interaction: discord.Interaction, reset: Optional[bool] = False):
+    # get users and help messages counts if greater than zero
+    help_data = functions.handle_data("SELECT userId, helpMsgs FROM scores WHERE helpMsgs > 0 ORDER BY helpMsgs DESC", ())
+    
+    # if help data is a single tuple, convert to list
+    if type(help_data) is tuple:
+        help_data = [help_data]
+
+    # create a list of leaderboard entries as strings
+    leaderboard_entries = [f"**{i+1}**. <@{user_id}> - {help_msgs} messages" for i, (user_id, help_msgs) in enumerate(help_data)]
+
+    # join leaderboard entries into a single string
+    # with newlines between each entry
+    leaderboard_text = "\n".join(leaderboard_entries)
+
+    # create embed & put leaderboard entries
+    response = discord.Embed(title="Leaderboard", description=leaderboard_text)
+
+    # if reset flag is true, reset help_msgs count
+    if reset:
+        functions.handle_data("UPDATE scores SET helpMsgs = 0", ())
+
+    # respond with embed message
+    await interaction.response.send_message(embed=response)
+
+
 @client.event
 async def on_message(message):
     # if message is a potential donation, handle it
@@ -64,7 +93,7 @@ async def on_message(message):
         await moderation.handle_command(message)
 
     # if awarding helpful messages is enabled & in help forum, award message
-    if data.award_help_message and message.channel.parent.id == data.help_forum:
+    if data.award_help_message and isinstance(message.channel, discord.ForumChannel) and message.channel.parent.id == data.help_forum:
         await messages.award_help_message(message)
     
     # if awarding points is enabled & not from bot, award points
