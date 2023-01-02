@@ -1,7 +1,7 @@
 ### CONFIG - Feel free to change these values when testing the bot.
 
 ### REQUIRED, used to get guild object in on_ready
-server_id = 1058183380254081205
+server_id = 306153640023031820
 
 ### IMPORTANT, it is recommended to set to False if testing
 # setting to False prevents points and ranks from being updated
