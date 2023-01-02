@@ -93,7 +93,7 @@ async def on_message(message):
         await moderation.handle_command(message)
 
     # if awarding helpful messages is enabled & in help forum, award message
-    if data.award_help_message and isinstance(message.channel, discord.ForumChannel) and message.channel.parent.id == data.help_forum:
+    if data.award_help_message and message.channel.type == discord.ChannelType.public_thread and message.channel.parent.id == data.help_forum:
         await messages.award_help_message(message)
     
     # if awarding points is enabled & not from bot, award points
