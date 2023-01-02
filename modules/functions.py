@@ -32,8 +32,8 @@ def get_data(user_id):
         return user_data
 
     # otherwise, add user to database
-    handle_data("INSERT INTO scores (userId, points, level) VALUES ((?), (?), (?))",
-        (str(user_id), 1, 1))
+    handle_data("INSERT INTO scores (userId, points, level, helpMsgs) VALUES ((?), (?), (?), (?))",
+        (str(user_id), 1, 1, 0))
 
     # return new data
     return handle_data("SELECT * FROM scores WHERE userId = (?)", (user_id,))

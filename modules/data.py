@@ -1,11 +1,15 @@
 ### CONFIG - Feel free to change these values when testing the bot.
 
 ### REQUIRED, used to get guild object in on_ready
-server_id = 306153640023031820
+server_id = 1058183380254081205
 
 ### IMPORTANT, it is recommended to set to False if testing
 # setting to False prevents points and ranks from being updated
 award_points = True
+
+### IMPORTANT, it is recommended to set to False if testing
+# setting to False prevents helpful messages from being updated
+award_help_message = True
 
 # optional, you can leave this as is
 version = "Dr. Script 1.0"
@@ -21,6 +25,9 @@ mod_logs = 332883332528603146
 # channel that new joins and donations are sent to
 # if you aren't testing this, you can leave this as is
 joins_and_donations = 473852097415086090
+
+# forum where users ask questions
+help_forum = 1059300803145375834
 
 # ids of channels with specific points earned per message (or defaults to 1)
 # if you aren't testing this, you can leave this as is

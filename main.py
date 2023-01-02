@@ -53,7 +53,6 @@ async def points(interaction: discord.Interaction, user: Optional[discord.Member
     # respond with embed message 
     await interaction.response.send_message(embed=response)
 
-
 @client.event
 async def on_message(message):
     # if message is a potential donation, handle it
@@ -63,6 +62,10 @@ async def on_message(message):
     # if message is a moderation command, handle it
     if message.content.startswith(data.prefix):
         await moderation.handle_command(message)
+
+    # if awarding helpful messages is enabled & in help forum, award message
+    if data.award_help_message and message.channel.parent.id == data.help_forum:
+        await messages.award_help_message(message)
     
     # if awarding points is enabled & not from bot, award points
     if data.award_points and not message.author.bot:
