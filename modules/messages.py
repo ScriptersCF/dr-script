@@ -54,7 +54,7 @@ async def award_points(message):
         point_increment *= 2
     
     # get current user data and new point count
-    user_id, points, _, _ = functions.get_data(message.author.id)
+    user_id, points, _, _, _ = functions.get_data(message.author.id)
     new_points = points + point_increment
 
     # get previous level and new level
@@ -77,3 +77,21 @@ async def award_points(message):
     if new_points >= 30:
         if time_now - joined_at >= timedelta(days = 3):
             await process_auto_roles(message, new_points)
+
+
+async def award_help_message(message):
+    # if message isn't significant, ignore it
+    if len(message.content) < 10:
+        return
+
+    # if the message is sent by the author of the post, ignore it
+    if (message.author.id == message.channel.owner_id):
+        return
+    
+    # get current user data and new help messages count
+    user_id, _, _, _, help_msgs = functions.get_data(message.author.id)
+    new_help_msgs = help_msgs + 1
+
+    # update user's help messages count in database
+    functions.handle_data("UPDATE scores SET helpMsgs = (?) WHERE userId = (?)",
+        (str(new_help_msgs), str(user_id)))
