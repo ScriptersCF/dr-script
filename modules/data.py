@@ -28,7 +28,7 @@ joins_and_donations = 473852097415086090
 
 # forum for questions where help messages are awarded
 # if you aren't testing this, you can leave this as is
-help_forum = 1059300803145375834
+help_forum = 1043705277976936478
 
 # ids of channels with specific points earned per message (or defaults to 1)
 # if you aren't testing this, you can leave this as is
@@ -71,7 +71,7 @@ nitro_booster = 585533734548406305
 double_xp = 1044338857988075581
 red_colour = 359352595233374208
 
-admin_role = 1059371654049972274
+admin_role = 306155551199461377
 staff_role = 1044304663073280061
 shban_role = 416786636118949918
 aban_role = 550114698297737216
