@@ -11,7 +11,7 @@ class MyClient(discord.Client):
     def __init__(self, *, intents: discord.Intents):
         super().__init__(intents=intents)
         self.tree = app_commands.CommandTree(self)
-    
+
     # when the bot is ready, make cmds available in the server
     async def setup_hook(self):
         self.tree.copy_global_to(guild=SERVER)
@@ -112,6 +112,41 @@ async def leaderboard(interaction: discord.Interaction, page: Optional[int] = 1)
     # respond with embed message 
     await interaction.response.send_message(embed=response)
 
+
+@client.tree.command()
+@app_commands.describe(reset="Whether the leaderboard will be reset or not")
+async def helpstats(interaction: discord.Interaction, reset: Optional[bool] = False):
+    # if user is not an admin, ignore it
+    if discord.utils.get(interaction.user.roles, id=data.admin_role) is None:
+        return
+
+    # get users data if message count is greater than zero
+    help_data = functions.handle_data("SELECT userId, helpMsgs FROM scores WHERE helpMsgs > 0 ORDER BY helpMsgs DESC",
+                                      ())
+
+    # if data is a tuple, convert to list
+    if type(help_data) is tuple:
+        help_data = [help_data]
+
+    # create list of leaderboard entries as strings
+    leaderboard_entries = [f"**{i + 1}**. <@{user_id}> - {help_msgs} messages" for i, (user_id, help_msgs) in
+                           enumerate(help_data)]
+
+    # join leaderboard entries into a single string
+    # with newlines between each entry
+    leaderboard_text = "\n".join(leaderboard_entries)
+
+    # create embed & put leaderboard entries
+    response = discord.Embed(title="Leaderboard", description=leaderboard_text)
+
+    # if reset flag is true, reset help messages counts
+    if reset:
+        functions.handle_data("UPDATE scores SET helpMsgs = 0", ())
+
+    # respond with embed message
+    await interaction.response.send_message(embed=response)
+
+
 @client.event
 async def on_message(message):
     # if message is a potential donation, handle it
@@ -121,7 +156,12 @@ async def on_message(message):
     # if message is a moderation command, handle it
     if message.content.startswith(data.prefix):
         await moderation.handle_command(message)
-    
+
+    # if awarding help messages is enabled & not from bot & in help forum, award help message
+    if data.award_help_message and not message.author.bot:
+        if message.channel.type == discord.ChannelType.public_thread and message.channel.parent.id == data.help_forum:
+            await messages.award_help_message(message)
+
     # if awarding points is enabled & not from bot, award points
     if data.award_points and not message.author.bot:
         await messages.award_points(message)
