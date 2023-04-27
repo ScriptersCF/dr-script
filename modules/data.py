@@ -1,15 +1,15 @@
 ### CONFIG - Feel free to change these values when testing the bot.
 
 ### REQUIRED, used to get guild object in on_ready
-server_id = 306153640023031820
+server_id = 847349748528185344
 
 ### IMPORTANT, it is recommended to set to False if testing
 # setting to False prevents points and ranks from being updated
-award_points = True
+award_points = False
 
 ### IMPORTANT, it is recommended to set to False if testing
 # setting to False prevents helpful messages from being updated
-award_help_message = True
+award_help_message = False
 
 # optional, you can leave this as is
 version = "Dr. Script 1.0"
@@ -32,7 +32,7 @@ help_forum = 1043705277976936478
 
 # forum for selling or buying work
 # if you aren't testing this, you can leave this as is
-sell_and_hire_forum = 1051087628004495400
+sell_and_hire_forum = 1100298532570800220
 
 # ids of channels with specific points earned per message (or defaults to 1)
 # if you aren't testing this, you can leave this as is
