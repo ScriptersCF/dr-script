@@ -30,6 +30,10 @@ joins_and_donations = 473852097415086090
 # if you aren't testing this, you can leave this as is
 help_forum = 1043705277976936478
 
+# forum for selling or buying work
+# if you aren't testing this, you can leave this as is
+sell_and_hire_forum = 924480167936655430
+
 # ids of channels with specific points earned per message (or defaults to 1)
 # if you aren't testing this, you can leave this as is
 channel_points = {
