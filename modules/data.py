@@ -32,7 +32,7 @@ help_forum = 1043705277976936478
 
 # forum for selling or buying work
 # if you aren't testing this, you can leave this as is
-sell_and_hire_forum = 924480167936655430
+sell_and_hire_forum = 1051087628004495400
 
 # ids of channels with specific points earned per message (or defaults to 1)
 # if you aren't testing this, you can leave this as is
