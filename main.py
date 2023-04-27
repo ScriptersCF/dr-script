@@ -215,6 +215,25 @@ async def on_message_delete(message):
 
 
 @client.event
+async def on_thread_create(thread):
+    # if the thread is within the sell and hire forum
+    if thread.parentId == data.sell_and_hire_forum:
+        # check if the title includes a price point in closed square brackets
+        has_valid_title = await functions.verify_sell_hire_name(thread.name)
+
+        # if title does not include a price point
+        if not has_valid_title:
+            # remove post and DM user reminding them of rules
+            thread_owner = thread.owner
+
+            # compile remind message and message title
+            remind_message = f"{data.sell_and_hire_remind_message}Post title: \"{thread.name}\""
+
+            await thread_owner.send(remind_message)
+            await thread.delete()
+
+
+@client.event
 async def on_member_update(before, after):
     # if roles haven't been changed, ignore
     if before.roles == after.roles:
