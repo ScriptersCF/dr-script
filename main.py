@@ -217,7 +217,7 @@ async def on_message_delete(message):
 @client.event
 async def on_thread_create(thread):
     # if the thread is within the sell and hire forum
-    if thread.parentId == data.sell_and_hire_forum:
+    if thread.parent_id == data.sell_and_hire_forum:
         # check if the title includes a price point in closed square brackets
         has_valid_title = await functions.verify_sell_hire_name(thread.name)
 
