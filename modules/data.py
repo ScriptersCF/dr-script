@@ -30,6 +30,10 @@ joins_and_donations = 473852097415086090
 # if you aren't testing this, you can leave this as is
 help_forum = 1043705277976936478
 
+# forum for selling or buying work
+# if you aren't testing this, you can leave this as is
+sell_and_hire_forum = 1051087628004495400
+
 # ids of channels with specific points earned per message (or defaults to 1)
 # if you aren't testing this, you can leave this as is
 channel_points = {
@@ -181,6 +185,16 @@ welcome_message = """**Here's what you're about to have access to...**
 **How do I join?**
 Simply head over to <#886612569601769512>, select your roles & verify :white_check_mark:
 """
+
+sell_and_hire_remind_message = """:warning: **Is your title missing the price?** It might need updating.
+
+:point_right: Titles must start with an estimated price/rate & currency in square brackets.
+*Examples: [30,000R$], [100USD], [20GBP per hr], [20%]*
+
+Portfolios are exceptions, if you are advertising your own services that can vary massively in quotes.
+
+:book: **View all rules here**: #"[READ ME] How to sell & hire"
+*This notice will hide in 5 minutes.*"""
 
 joined_message = "Welcome to the community, <@{0}>! :wave:"
 

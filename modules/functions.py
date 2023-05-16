@@ -1,4 +1,5 @@
 import sqlite3
+import re
 from modules import data
 
 # handle_data: sets and gets data from the database
@@ -48,3 +49,11 @@ async def has_custom_colour(user):
     
     # otherwise, return false
     return False
+
+
+# verify_sell_hire_name: checks if a forum post on sell and hire follows the naming conventions listed in rules
+async def verify_sell_hire_name(name):
+    # post names must start with a price listed in square brackets
+    has_price_in_brackets = re.match("^\[(.*?)\]", name)
+
+    return has_price_in_brackets

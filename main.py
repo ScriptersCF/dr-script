@@ -215,6 +215,18 @@ async def on_message_delete(message):
 
 
 @client.event
+async def on_thread_create(thread):
+    # if the thread is within the sell and hire forum
+    if thread.parent_id == data.sell_and_hire_forum:
+        # check if the title includes a price point in closed square brackets
+        has_valid_title = await functions.verify_sell_hire_name(thread.name)
+
+        # if title does not include a price point, remind user to add one
+        if not has_valid_title:
+            await thread.send(data.sell_and_hire_remind_message, delete_after=300)
+
+
+@client.event
 async def on_member_update(before, after):
     # if roles haven't been changed, ignore
     if before.roles == after.roles:
