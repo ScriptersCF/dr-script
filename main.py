@@ -226,9 +226,9 @@ async def on_member_update(before, after):
 
     # if roles have been added...
     if added_roles:
-        # if verified role was added, send welcome message
+        # if verified role was added, send welcome message & delete after 5 mins
         if data.roles[data.verified] in added_roles and data.general:
-            await data.general.send(data.joined_message.format(after.id), delete_after=300) # send welcome message, then delete after 5 minutes
+            await data.general.send(data.joined_message.format(after.id), delete_after=300)
 
         # otherwise, check if relevant donation role was added
         else:
