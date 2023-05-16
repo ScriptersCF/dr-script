@@ -186,20 +186,15 @@ welcome_message = """**Here's what you're about to have access to...**
 Simply head over to <#886612569601769512>, select your roles & verify :white_check_mark:
 """
 
-sell_and_hire_remind_message = """:bangbang: **Your post in <#1051087628004495400> has been removed** :bangbang:
+sell_and_hire_remind_message = """:warning: **Is your title missing the price?** It might need updating.
 
-Reason: Invalid title
-
-Examples: [30,000R$], [100USD], [20GBP per hr], [20%]
-Your title must start with an estimated price/rate & currency, in square brackets.
-
-⚠️ Posts that do not include a pay method from now will be removed.
+:point_right: Titles must start with an estimated price/rate & currency in square brackets.
+*Examples: [30,000R$], [100USD], [20GBP per hr], [20%]*
 
 Portfolios are exceptions, if you are advertising your own services that can vary massively in quotes.
 
-:book: **Read the rules before posting**: <#1051091557312385034>
-
-"""
+:book: **View all rules here**: #"[READ ME] How to sell & hire"
+*This notice will hide in 5 minutes.*"""
 
 joined_message = "Welcome to the community, <@{0}>! :wave:"
 

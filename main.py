@@ -221,16 +221,9 @@ async def on_thread_create(thread):
         # check if the title includes a price point in closed square brackets
         has_valid_title = await functions.verify_sell_hire_name(thread.name)
 
-        # if title does not include a price point
+        # if title does not include a price point, remind user to add one
         if not has_valid_title:
-            # remove post and DM user reminding them of rules
-            thread_owner = thread.owner
-
-            # compile remind message and message title
-            remind_message = f"{data.sell_and_hire_remind_message}Post title: \"{thread.name}\""
-
-            await thread_owner.send(remind_message)
-            await thread.delete()
+            await thread.send(data.sell_and_hire_remind_message, delete_after=300)
 
 
 @client.event
