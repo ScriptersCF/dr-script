@@ -194,7 +194,9 @@ sell_and_hire_remind_message = """:warning: **Is your title missing the price?**
 Portfolios are exceptions, if you are advertising your own services that can vary massively in quotes.
 
 :book: **View all rules here**: #"[READ ME] How to sell & hire"
-*This notice will hide in 5 minutes.*"""
+*This notice will hide in 5 minutes.*
+
+<@{0}>"""
 
 joined_message = "Welcome to the community, <@{0}>! :wave:"
 

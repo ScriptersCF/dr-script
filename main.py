@@ -223,7 +223,7 @@ async def on_thread_create(thread):
 
         # if title does not include a price point, remind user to add one
         if not has_valid_title:
-            await thread.send(data.sell_and_hire_remind_message, delete_after=300)
+            await thread.send(data.sell_and_hire_remind_message.format(str(thread.owner.id)), delete_after=300)
 
 
 @client.event
